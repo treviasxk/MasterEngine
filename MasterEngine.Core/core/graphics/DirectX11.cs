@@ -1,5 +1,3 @@
-using System;
-using System.Threading;
 using MasterEngine.Graphic;
 using Silk.NET.DXGI;
 using Silk.NET.Maths;
@@ -8,8 +6,7 @@ using Silk.NET.Windowing;
 namespace MasterEngine.Core.Graphic;
 public class DirectX11 : GraphicComponent {
     public DXGI? DXGI {get;set;}
-    public DirectX11(Platform platform){
-        Platform = platform;
+    public DirectX11(){
         var options = WindowOptions.DefaultVulkan;
         options.WindowBorder = WindowBorder.Hidden;
         options.Position = new Vector2D<int>(0,0);
@@ -27,7 +24,7 @@ public class DirectX11 : GraphicComponent {
 
     private void Load(){
        if(!IsClosing){
-            SetHandle();
+            Init();
             OnLoad?.Invoke();
             
             DXGI = DXGI.GetApi(Window);

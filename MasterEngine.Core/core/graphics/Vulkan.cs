@@ -1,5 +1,3 @@
-using System;
-using System.Threading;
 using MasterEngine.Graphic;
 using Silk.NET.Maths;
 using Silk.NET.Vulkan;
@@ -8,8 +6,7 @@ using Silk.NET.Windowing;
 namespace MasterEngine.Core.Graphic;
 public class Vulkan : GraphicComponent {
     public Vk? VK {get;set;}
-    public Vulkan(Platform platform){
-        Platform = platform;
+    public Vulkan(){
         var options = WindowOptions.DefaultVulkan;
         options.WindowBorder = WindowBorder.Hidden;
         options.Position = new Vector2D<int>(0,0);
@@ -27,7 +24,7 @@ public class Vulkan : GraphicComponent {
 
     private void Load(){
        if(!IsClosing){
-            SetHandle();
+            Init();
             OnLoad?.Invoke();
             
             VK = Vk.GetApi();

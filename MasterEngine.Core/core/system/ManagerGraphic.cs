@@ -1,32 +1,27 @@
-using System;
 using Avalonia.Controls;
-using Avalonia.Platform;
 using MasterEngine.Core.Graphic;
+using MasterEngine.Runtime;
 
 namespace MasterEngine.Graphic{
     public enum GraphicAPI {DirectX11, DirectX12, Vulkan, OpenGL}
     public enum Platform {Windows, Linux, Mac, Android, Unknown}
-    public class ManagerGraphic : NativeControlHost, IDisposable {
+    public class ManagerGraphic : IDisposable {
         public GraphicAPI API {get;}
-        public GraphicComponent? BackEndGraphic {get; set;}
-        public ContentControl ContentControl {get;}
-        public Platform Platform {get;}
-        public IPlatformHandle? View {get;set;}
+        public GraphicComponent? GraphicComponent {get; set;}
+        public ContentControl Viewport {get;}
 
         public ManagerGraphic(ContentControl contentControl, GraphicAPI graphicAPI){
             Console.WriteLine("Checking graphics...");
-            ContentControl = contentControl;
+            Viewport = contentControl;
             API = graphicAPI;
-            Platform = CheckPlatform();
+            Viewport.SizeChanged += OnSizeChanded;
             InitializeGraphic(API);
-            ContentControl.SizeChanged += OnSizeChanded;
-            UpdateSize();
         }
 
         void UpdateSize(){
-            if(BackEndGraphic != null && BackEndGraphic.Window != null){
-                BackEndGraphic.Window.Position = new Silk.NET.Maths.Vector2D<int>(0,0);
-                BackEndGraphic.Window.Size = new Silk.NET.Maths.Vector2D<int>((int)ContentControl.Width, (int)ContentControl.Height);
+            if(GraphicComponent != null && GraphicComponent.Window != null){
+                GraphicComponent.Window.Position = new Silk.NET.Maths.Vector2D<int>(0,0);
+                GraphicComponent.Window.Size = new Silk.NET.Maths.Vector2D<int>((int)Viewport.Width, (int)Viewport.Height);
             }
         }
 
@@ -34,48 +29,42 @@ namespace MasterEngine.Graphic{
             Console.WriteLine("Initializing {0}...", api);
             switch(api){
                 case GraphicAPI.OpenGL:
-                    BackEndGraphic = new OpenGL(Platform);
+                    GraphicComponent = new OpenGL();
                 break;
                 case GraphicAPI.Vulkan:
-                    BackEndGraphic = new Vulkan(Platform);
+                    GraphicComponent = new Vulkan();
                 break;
                 case GraphicAPI.DirectX11:
-                    BackEndGraphic = new DirectX11(Platform);
+                    GraphicComponent = new DirectX11();
                 break;
                 case GraphicAPI.DirectX12:
-                    BackEndGraphic = new DirectX12(Platform);
+                    GraphicComponent = new DirectX12();
                 break;
             }
-            if(BackEndGraphic != null)
-                BackEndGraphic.OnLoad += OnLoad;
+            if(GraphicComponent != null){
+                GraphicComponent.OnLoad += OnLoad;
+                GraphicComponent.OnUpdate += OnUpdate;
+                GraphicComponent.OnFixedUpdate += OnFixedUpdate;
+            }
+        }
+
+        private void OnFixedUpdate(double deltaTime){
+            
+        }
+
+        private void OnUpdate(double deltaTime){
+            if(GraphicComponent != null && GraphicComponent.Window != null)
+                GraphicComponent.Window.FramesPerSecond = Application.FrameRate;    // Apply FPS application
         }
 
         private void OnLoad(){
-            if(BackEndGraphic != null)
-                ContentControl.Content = new Viewport(BackEndGraphic.Handle, Platform);
+            if(GraphicComponent != null)
+                Viewport.Content = new Viewport(GraphicComponent.Handle);
         }
-
-        private Platform CheckPlatform(){
-            if(OperatingSystem.IsWindows())
-                return Platform.Windows;
-
-            if(OperatingSystem.IsLinux())
-                return Platform.Linux;
-
-            if(OperatingSystem.IsMacOS())
-                return Platform.Mac;
-
-            if(OperatingSystem.IsAndroid())
-                return Platform.Android;
-
-            return Platform.Unknown;
-        }
-
-
         private void OnSizeChanded(object? sender, SizeChangedEventArgs e) => UpdateSize();
 
         public void Dispose(){
-            BackEndGraphic?.Dispose();
+            GraphicComponent?.Dispose();
         }
     }
 }

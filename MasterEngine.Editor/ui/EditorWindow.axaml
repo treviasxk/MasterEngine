@@ -5,8 +5,5 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="MasterEngine.EditorWindow"
         Title="MasterEngine">
-        <ContentControl x:Name="View"
-                Width="500"
-                Height="500"
-                Background="Black"/>
+        <ContentControl x:Name="Viewport" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Black"/>
 </Window>

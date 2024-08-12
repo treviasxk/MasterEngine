@@ -1,10 +1,8 @@
-
-
-using System;
 using System.Runtime.InteropServices;
 using Avalonia.Controls;
 using Avalonia.Platform;
 using MasterEngine.Graphic;
+using MasterEngine.Runtime;
 
 namespace MasterEngine;
 public class Viewport : NativeControlHost{
@@ -12,17 +10,18 @@ public class Viewport : NativeControlHost{
     public static extern int SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
 
     nint Handle {get;}
-    Platform Platform {get;}
-    public Viewport(nint handle, Platform platform){
+    public Viewport(nint handle){
         Handle = handle;
-        Platform = platform;
     }
 
     protected override IPlatformHandle CreateNativeControlCore(IPlatformHandle parent){
         var view = base.CreateNativeControlCore(parent);
-        switch(Platform){
+        switch(Application.Platform){
             case Platform.Windows:  // set DXHandle
                 SetParent(Handle, view.Handle);
+            break;
+            case Platform.Linux:  // set X11
+                // code
             break;
         }
         return view;

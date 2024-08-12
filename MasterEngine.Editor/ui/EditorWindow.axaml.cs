@@ -14,7 +14,7 @@ public partial class EditorWindow : Avalonia.Controls.Window{
     }
 
     private void OnLoaded(object? sender, RoutedEventArgs e){
-        graphic = new ManagerGraphic(View, GraphicAPI.OpenGL);
+        graphic = new ManagerGraphic(Viewport, GraphicAPI.OpenGL);
         Title = "Master Engine - " + graphic?.API;
     }
 
