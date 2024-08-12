@@ -3,7 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="MasterEngine.Runtime.MainWindow"
+        x:Class="MasterEngine.Runtime.RuntimeWindow"
         Title="MasterEngine.Runtime">
-    Welcome to Avalonia!
+        <ContentControl x:Name="Viewport" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Black"/>
 </Window>

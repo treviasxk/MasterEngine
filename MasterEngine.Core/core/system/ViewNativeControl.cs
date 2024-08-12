@@ -5,7 +5,7 @@ using MasterEngine.Graphic;
 using MasterEngine.Runtime;
 
 namespace MasterEngine;
-public class Viewport : NativeControlHost{
+public class ViewNativeControl : NativeControlHost{
     [DllImport("user32.dll")]
     public static extern int SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
     [DllImport("user32.dll", EntryPoint = "SetWindowPos")]
@@ -16,7 +16,7 @@ public class Viewport : NativeControlHost{
     /// Set handle graphic to embude in content control Avalonia.
     /// </summary>
     /// <param name="handle"></param>
-    public Viewport(nint handle){
+    public ViewNativeControl(nint handle){
         Handle = handle;
     }
 

@@ -4,7 +4,7 @@ using MasterEngine.Runtime;
 using Silk.NET.Input;
 
 namespace MasterEngine.Graphic{
-    public enum GraphicAPI {DirectX11, DirectX12, Vulkan, OpenGL}
+    public enum GraphicAPI {DirectX11, DirectX12, Vulkan, OpenGL, Auto}
     public enum Platform {Windows, Linux, Mac, Android, Unknown}
     public class ManagerGraphic : IDisposable {
         public GraphicAPI API {get;}
@@ -64,7 +64,7 @@ namespace MasterEngine.Graphic{
                     input.Keyboards[i].KeyDown += KeyDown;
 
                 // Create viewport
-                Viewport.Content = new Viewport(GraphicComponent.Handle);
+                Viewport.Content = new ViewNativeControl(GraphicComponent.Handle);
                 UpdateSize();
             }
         }
