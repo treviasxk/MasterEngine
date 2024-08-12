@@ -1,12 +1,14 @@
 
+using System.Reflection;
 using MasterEngine.Graphic;
 
 namespace MasterEngine.Runtime;
 public class Application {
+    public static string EngineName {get;} = "Master Engine";
     public static string CompanyName {get;} = "Test";
     public static string ProductName {get;} = "Test";
     public static string Version {get;} = "1.0.0.0";
-    public static string MasterEngineVersion {get;} = Environment.Version.ToString();
+    public static string EngineVersion {get;} = Assembly.GetExecutingAssembly().GetName().Version.ToString();
     public static Platform Platform {get{return CheckPlatform();}}
     public static int FrameRate {get;set;} = 60;
 

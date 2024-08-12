@@ -4,7 +4,63 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="MasterEngine.EditorWindow"
-        Title="MasterEngine"
-        Padding="5">
-        <ContentControl x:Name="Viewport" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Black"/>
+        Title="MasterEngine">
+        <DockPanel>
+                <Panel DockPanel.Dock="Top" Height="23">
+                        <Menu Padding="5 0" HorizontalAlignment="Left" FontSize="11">
+                                <MenuItem Header="Project">
+                                        <MenuItem Header="New..."/>
+                                        <MenuItem Header="Open..."/>
+                                        <MenuItem Header="Save"/>
+                                        <Separator/>
+                                        <MenuItem Header="Preference"/>
+                                        <MenuItem Header="Settings"/>
+                                        <Separator/>
+                                        <MenuItem Header="Compile"/>
+                                        <MenuItem Header="Build.."/>
+                                        <Separator/>
+                                        <MenuItem Header="Exit"/>
+                                </MenuItem>
+                                <MenuItem Header="View">
+                                        <MenuItem Header="Hierarchy"/>
+                                        <MenuItem Header="Inspector"/>
+                                        <Separator/>
+                                        <MenuItem Header="Scene"/>
+                                        <MenuItem Header="Game"/>
+                                        <Separator/>
+                                        <MenuItem Header="Animator"/>
+                                        <MenuItem Header="Animation"/>
+                                        <Separator/>
+                                        <MenuItem Header="Audio Mixer"/>
+                                        <MenuItem Header="Audio Out"/>
+                                </MenuItem>
+                                <MenuItem Header="Packages">
+                                        <MenuItem Header="Install.."/>
+                                        <MenuItem Header="Show Packages"/>
+                                </MenuItem>
+                                <MenuItem Header="Help">
+                                        <MenuItem Header="Welcome"/>
+                                        <MenuItem Header="Documentation"/>
+                                        <Separator/>
+                                        <MenuItem Header="Avalonia"/>
+                                        <MenuItem Header="Silk.Net"/>
+                                        <Separator/>
+                                        <MenuItem Header="Check for Update..."/>
+                                        <Separator/>
+                                        <MenuItem Header="About"/>
+                                </MenuItem>
+                        </Menu>
+                </Panel>
+                <Panel DockPanel.Dock="Bottom" Height="20">
+                        <Menu HorizontalAlignment="Left" FontSize="11">
+                                <TextBlock Text="Master Engine" x:Name="LabelStatusBar"/>
+                        </Menu>
+                        <Menu HorizontalAlignment="Right" FontSize="11">
+                                <TextBlock Text="Loading..." x:Name="LabelStatusBarCompile"/>
+                                <ProgressBar x:Name="ProgressBarStatus" Margin="0 10" Height="14" Minimum="0" Maximum="100" Value="92" ShowProgressText="True" Foreground="CornflowerBlue"/>
+                                <TextBlock x:Name="LabelStatusBarVersion"/>
+                        </Menu>
+                </Panel>
+                <ContentControl x:Name="Viewport" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Black" />
+        </DockPanel>
 </Window>

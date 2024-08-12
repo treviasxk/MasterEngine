@@ -46,7 +46,7 @@ public class Vulkan : GraphicComponent {
             SType = StructureType.ApplicationInfo,
             PApplicationName = (byte*)Marshal.StringToHGlobalAnsi(Application.ProductName),
             ApplicationVersion = new Version32(1, 0, 0),
-            PEngineName = (byte*)Marshal.StringToHGlobalAnsi("Master Engine"),
+            PEngineName = (byte*)Marshal.StringToHGlobalAnsi(Application.EngineName),
             EngineVersion = new Version32(1, 0, 0),
             ApiVersion = Vk.Version11
         };
