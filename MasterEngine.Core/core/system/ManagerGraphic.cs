@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using MasterEngine.Core.Graphic;
 using MasterEngine.Runtime;
+using Silk.NET.Input;
 
 namespace MasterEngine.Graphic{
     public enum GraphicAPI {DirectX11, DirectX12, Vulkan, OpenGL}
@@ -19,10 +20,8 @@ namespace MasterEngine.Graphic{
         }
 
         void UpdateSize(){
-            if(GraphicComponent != null && GraphicComponent.Window != null){
-                GraphicComponent.Window.Position = new Silk.NET.Maths.Vector2D<int>(0,0);
-                GraphicComponent.Window.Size = new Silk.NET.Maths.Vector2D<int>((int)Viewport.Width, (int)Viewport.Height);
-            }
+            if(GraphicComponent != null && GraphicComponent.Window != null)
+                GraphicComponent.Window.Size = new Silk.NET.Maths.Vector2D<int>((int)Viewport.Bounds.Size.Width, (int)Viewport.Bounds.Size.Height);
         }
 
         void InitializeGraphic(GraphicAPI api){
@@ -58,9 +57,25 @@ namespace MasterEngine.Graphic{
         }
 
         private void OnLoad(){
-            if(GraphicComponent != null)
+            if(GraphicComponent != null && GraphicComponent.Window != null){
+                // Create Inputs
+                IInputContext input = GraphicComponent.Window.CreateInput();
+                for (int i = 0; i < input.Keyboards.Count; i++)
+                    input.Keyboards[i].KeyDown += KeyDown;
+
+                // Create viewport
                 Viewport.Content = new Viewport(GraphicComponent.Handle);
+                UpdateSize();
+            }
         }
+
+        private void KeyDown(IKeyboard keyboard, Key key, int keyCode){
+            if(GraphicComponent != null && key == Key.Escape){
+                //Dispose();
+            }
+        }
+
+
         private void OnSizeChanded(object? sender, SizeChangedEventArgs e) => UpdateSize();
 
         public void Dispose(){

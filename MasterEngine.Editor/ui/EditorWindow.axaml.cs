@@ -6,7 +6,9 @@ namespace MasterEngine;
 
 public partial class EditorWindow : Avalonia.Controls.Window{
     ManagerGraphic? graphic;
-    public EditorWindow(){
+    GraphicAPI graphicAPI;
+    public EditorWindow(GraphicAPI graphicAPI){
+        this.graphicAPI = graphicAPI;
         Console.WriteLine("Initializing UI...");
         InitializeComponent();
         Loaded += OnLoaded;
@@ -14,7 +16,7 @@ public partial class EditorWindow : Avalonia.Controls.Window{
     }
 
     private void OnLoaded(object? sender, RoutedEventArgs e){
-        graphic = new ManagerGraphic(Viewport, GraphicAPI.OpenGL);
+        graphic = new ManagerGraphic(Viewport, graphicAPI);
         Title = "Master Engine - " + graphic?.API;
     }
 

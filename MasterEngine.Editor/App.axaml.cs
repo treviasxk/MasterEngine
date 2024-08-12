@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using MasterEngine.Graphic;
 
 namespace MasterEngine.Editor;
 
@@ -11,7 +12,7 @@ public partial class App : Application{
 
     public override void OnFrameworkInitializationCompleted(){
         if(ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            desktop.MainWindow = new EditorWindow();
+            desktop.MainWindow = new EditorWindow(GraphicAPI.OpenGL);
 
         base.OnFrameworkInitializationCompleted();
     }

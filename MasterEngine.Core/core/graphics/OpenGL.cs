@@ -2,7 +2,6 @@ using System.Drawing;
 using Avalonia.Threading;
 using MasterEngine.Graphic;
 using MasterEngine.Runtime;
-using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
 
@@ -13,7 +12,7 @@ public class OpenGL : GraphicComponent {
         var options = WindowOptions.Default;
         options.FramesPerSecond = Application.FrameRate;
         options.WindowBorder = WindowBorder.Hidden;
-        options.Position = new Vector2D<int>(0,0);
+        options.IsVisible = false;
         Window = Silk.NET.Windowing.Window.Create(options);
         Window.Load += Load;
         Window.Update += Update;
@@ -22,12 +21,8 @@ public class OpenGL : GraphicComponent {
         new Thread(()=>Dispatcher.UIThread.Invoke(Window.Run)){IsBackground = true}.Start();
     }
 
-    private void Render(double deltaTime){
-        OnRender?.Invoke(deltaTime);
-        GL?.Clear(ClearBufferMask.ColorBufferBit);
-    }
 
-    private void Load(){
+    private unsafe void Load(){
        if(!IsClosing){
             Init();
             GL = GL.GetApi(Window);
@@ -38,8 +33,15 @@ public class OpenGL : GraphicComponent {
     }
 
     private void Update(double deltaTime){
-        if(!IsClosing){
+        if(!IsClosing){ // Stop Thread Safe
             OnUpdate?.Invoke(deltaTime);
+        }
+    }
+
+    private unsafe void Render(double deltaTime){
+        if(!IsClosing){ // Stop Thread Safe
+            OnRender?.Invoke(deltaTime);
+            GL?.Clear(ClearBufferMask.ColorBufferBit);
         }
     }
 

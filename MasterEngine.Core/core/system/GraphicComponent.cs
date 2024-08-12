@@ -1,11 +1,8 @@
-using System.Runtime.InteropServices;
 using MasterEngine.Runtime;
 using Silk.NET.Windowing;
 
 namespace MasterEngine.Graphic;
 public class GraphicComponent : IDisposable {
-    [DllImport("user32.dll")]
-    public static extern int SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
     public nint Handle {get;set;}
     public IWindow? Window {get;set;}
     public Action? OnLoad {get;set;}

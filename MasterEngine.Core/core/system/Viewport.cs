@@ -8,8 +8,14 @@ namespace MasterEngine;
 public class Viewport : NativeControlHost{
     [DllImport("user32.dll")]
     public static extern int SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
-
+    [DllImport("user32.dll", EntryPoint = "SetWindowPos")]
+    public static extern IntPtr SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int Y, int cx, int cy, int wFlags);
     nint Handle {get;}
+
+    /// <summary>
+    /// Set handle graphic to embude in content control Avalonia.
+    /// </summary>
+    /// <param name="handle"></param>
     public Viewport(nint handle){
         Handle = handle;
     }
@@ -19,6 +25,7 @@ public class Viewport : NativeControlHost{
         switch(Application.Platform){
             case Platform.Windows:  // set DXHandle
                 SetParent(Handle, view.Handle);
+                SetWindowPos(Handle, 0, 0, 0, 0, 0, 0x0001 | 0x0040); 
             break;
             case Platform.Linux:  // set X11
                 // code
