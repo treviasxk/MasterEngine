@@ -34,10 +34,10 @@ namespace MasterEngine.Graphic{
                     GraphicComponent = new Vulkan();
                 break;
                 case GraphicAPI.DirectX11:
-                    GraphicComponent = new DirectX11();
+                    GraphicComponent = new Direct3D11();
                 break;
                 case GraphicAPI.DirectX12:
-                    GraphicComponent = new DirectX12();
+                    GraphicComponent = new Direct3D12();
                 break;
             }
             if(GraphicComponent != null){

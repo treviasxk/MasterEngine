@@ -2,13 +2,12 @@ using Avalonia.Threading;
 using MasterEngine.Graphic;
 using MasterEngine.Runtime;
 using Silk.NET.DXGI;
-using Silk.NET.Maths;
 using Silk.NET.Windowing;
 
 namespace MasterEngine.Core.Graphic;
-public class DirectX12 : GraphicComponent {
+public class Direct3D12 : GraphicComponent {
     public DXGI? DXGI {get;set;}
-    public DirectX12(){
+    public Direct3D12(){
         var options = WindowOptions.DefaultVulkan;
         options.FramesPerSecond = Application.FrameRate;
         options.WindowBorder = WindowBorder.Hidden;

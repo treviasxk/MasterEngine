@@ -1,5 +1,4 @@
 using System.Drawing;
-using System.Numerics;
 using System.Runtime.CompilerServices;
 using Avalonia.Threading;
 using MasterEngine.Graphic;
@@ -12,8 +11,7 @@ using Silk.NET.Maths;
 using Silk.NET.Windowing;
 
 namespace MasterEngine.Core.Graphic;
-public class DirectX11 : GraphicComponent {
-   
+public class Direct3D11 : GraphicComponent {
     public DXGI? DXGI {get;set;}
     D3D11 D3D11 = null!;
     D3DCompiler compiler = null!;
@@ -58,7 +56,7 @@ public class DirectX11 : GraphicComponent {
     }
     ";
 
-    public DirectX11(){
+    public Direct3D11(){
         var options = WindowOptions.DefaultVulkan;
         options.FramesPerSecond = Application.FrameRate;
         options.WindowBorder = WindowBorder.Hidden;
