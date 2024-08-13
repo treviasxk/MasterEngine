@@ -15,6 +15,7 @@ public class Direct3D11 : GraphicComponent {
     public DXGI? DXGI {get;set;}
     D3D11 D3D11 = null!;
     D3DCompiler compiler = null!;
+    ComPtr<IDXGIAdapter> adapter = default;
     ComPtr<IDXGIFactory2> factory = default;
     ComPtr<IDXGISwapChain1> swapchain = default;
     ComPtr<ID3D11Device> device = default;
@@ -92,7 +93,7 @@ public class Direct3D11 : GraphicComponent {
         (
             D3D11.CreateDevice
             (
-                default(ComPtr<IDXGIAdapter>),
+                adapter,
                 D3DDriverType.Hardware,
                 Software: default,
                 (uint) CreateDeviceFlag.Debug,
@@ -224,7 +225,7 @@ public class Direct3D11 : GraphicComponent {
             {
                 SemanticName = name,
                 SemanticIndex = 0,
-                Format = Format.FormatR32G32B32Float,
+                Format = Format.FormatB8G8R8A8Unorm,
                 InputSlot = 0,
                 AlignedByteOffset = 0,
                 InputSlotClass = InputClassification.PerVertexData,

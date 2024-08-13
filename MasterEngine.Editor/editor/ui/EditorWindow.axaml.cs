@@ -20,7 +20,14 @@ public partial class EditorWindow : Window{
 
     private void OnLoaded(object? sender, RoutedEventArgs e){
         Window = this;
-        managerGraphic = new ManagerGraphic(Viewport, GraphicAPI.Direct3D11);
+        var SceneDock = new Editor.Layout.TabControl("Scene");
+        Viewport.Content = SceneDock;
+        var GameDock = new Editor.Layout.TabControl("Game");
+        SceneDock.Merge(GameDock);
+        TextBlock label = new TextBlock(){Text="dddddddd"};
+        GameDock.Control.Content = label;
+
+        managerGraphic = new ManagerGraphic(SceneDock.Control, GraphicAPI.OpenGL);
         Title = Application.EngineName + " - " + managerGraphic?.API;
         managerGraphic!.GraphicComponent!.OnUpdate += OnUpdate;
         LabelStatusBarVersion.Text = Application.EngineVersion;

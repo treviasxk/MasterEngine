@@ -1,0 +1,20 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="MasterEngine.Editor.Layout.TabControl"
+    Background="#090918">
+    <DockPanel>
+        <StackPanel
+            x:Name="PanelTabs"
+            Orientation="Horizontal"
+            DockPanel.Dock="Top"
+            Height="20"
+            HorizontalAlignment="Stretch"
+            Background="Black">
+        </StackPanel>
+
+        <ContentControl
+            x:Name="PanelContent"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"/>
+    </DockPanel>
+</UserControl>
