@@ -15,7 +15,11 @@
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.1.0" />
     <PackageReference Include="Silk.Net" Version="2.21.0" />
+    <PackageReference Include="Silk.Net.Direct3D.Compilers" Version="2.21.0" />
+    <PackageReference Include="Silk.Net.Direct3D11" Version="2.21.0" />
+    <PackageReference Include="Silk.Net.Direct3D12" Version="2.21.0" />
     <PackageReference Include="Silk.Net.DXGI" Version="2.21.0" />
+    <PackageReference Include="Silk.Net.Vulkan" Version="2.21.0" />
   </ItemGroup>
 
 </Project>

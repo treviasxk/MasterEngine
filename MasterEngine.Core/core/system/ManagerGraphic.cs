@@ -20,7 +20,7 @@ namespace MasterEngine.Graphic{
         }
 
         void UpdateSize(){
-            if(GraphicComponent != null && GraphicComponent.Window != null)
+            if(GraphicComponent != null)
                 GraphicComponent.Window.Size = new Silk.NET.Maths.Vector2D<int>((int)Viewport.Bounds.Size.Width, (int)Viewport.Bounds.Size.Height);
         }
 
@@ -52,12 +52,12 @@ namespace MasterEngine.Graphic{
         }
 
         private void OnUpdate(double deltaTime){
-            if(GraphicComponent != null && GraphicComponent.Window != null)
+            if(GraphicComponent != null)
                 GraphicComponent.Window.FramesPerSecond = Application.FrameRate;    // Apply FPS application
         }
 
         private void OnLoad(){
-            if(GraphicComponent != null && GraphicComponent.Window != null){
+            if(GraphicComponent != null){
                 // Create Inputs
                 IInputContext input = GraphicComponent.Window.CreateInput();
                 for (int i = 0; i < input.Keyboards.Count; i++)
