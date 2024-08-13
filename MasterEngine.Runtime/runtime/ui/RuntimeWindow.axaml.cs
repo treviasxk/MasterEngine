@@ -8,19 +8,16 @@ namespace MasterEngine.Runtime;
 public partial class RuntimeWindow : Window{
     
     ManagerGraphic? graphic;
-    GraphicAPI graphicAPI;
 
-    public RuntimeWindow(GraphicAPI graphicAPI){
+    public RuntimeWindow(){
         InitializeComponent();
-        this.graphicAPI = graphicAPI;
         Console.WriteLine("Initializing UI...");
-        InitializeComponent();
         Loaded += OnLoaded;
         Closing += OnClosing;
     }
 
     private void OnLoaded(object? sender, RoutedEventArgs e){
-        graphic = new ManagerGraphic(Viewport, graphicAPI);
+        graphic = new ManagerGraphic(Viewport, GraphicAPI.OpenGL);
         Title = Application.ProductName;
     }
 

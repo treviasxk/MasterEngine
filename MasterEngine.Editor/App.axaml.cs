@@ -12,7 +12,7 @@ public partial class App : Application{
 
     public override void OnFrameworkInitializationCompleted(){
         if(ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            desktop.MainWindow = new EditorWindow(GraphicAPI.OpenGL);
+            desktop.MainWindow = new EditorWindow();
 
         base.OnFrameworkInitializationCompleted();
     }

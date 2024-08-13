@@ -14,17 +14,13 @@ public class GraphicComponent : IDisposable {
     #pragma warning restore CS8618
 
     public void Init(){
-        if(Window.Native != null){
-            switch(Application.Platform){
-                case Platform.Windows:  // set DXHandle
-                    if(Window.Native.DXHandle != null)
-                        Handle = Window.Native.DXHandle.Value;
-                break;
-                case Platform.Linux:  // set X11
-                    if(Window.Native.X11 != null)
-                        Handle = Window.Native.X11.Value.Display;
-                break;
-            }
+        switch(Application.Platform){
+            case Platform.Windows:  // set DXHandle
+                Handle = Window.Native!.DXHandle!.Value;
+            break;
+            case Platform.Linux:  // set X11
+                Handle = Window.Native!.X11!.Value.Display;
+            break;
         }
     }
 

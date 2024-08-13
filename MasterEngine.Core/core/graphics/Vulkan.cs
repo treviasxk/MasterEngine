@@ -30,13 +30,13 @@ public class Vulkan : GraphicComponent {
     private void Load(){
        if(!IsClosing){
             Init();
-            InitVulkan();
+            InitializeGraphic();
             OnLoad?.Invoke();
             Console.WriteLine("Graphic API Vulkan initialized!");
        }
     }
 
-    private unsafe void InitVulkan(){
+    private unsafe void InitializeGraphic(){
         if(Window?.VkSurface is null)
             throw new Exception("Windowing platform doesn't support Vulkan.");
 
