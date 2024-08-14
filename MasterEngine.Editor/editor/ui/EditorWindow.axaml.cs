@@ -24,12 +24,12 @@ public partial class EditorWindow : Window{
         var tabControl = new Editor.Layout.TabControl();
         Tab Scene = new("Scene");
         Tab Game = new("Game");
-        Tab Hierachy = new("Hierachy");
+        Tab hierarchy = new("hierarchy");
         TextBlock textBlock = new(){Text = "Hello World!"};
         Game.Control.Content = textBlock;
         tabControl.Add(Scene);
         tabControl.Add(Game);
-        tabControl.Add(Hierachy);
+        tabControl.Add(hierarchy);
 
         PanelDock.Content = tabControl;
 

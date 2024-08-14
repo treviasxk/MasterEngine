@@ -7,18 +7,29 @@
         Width="100"
         Margin="2 0"
         Background="#121220">
+        <PathIcon
+            x:Name="TabIcon"
+            ZIndex="2"
+            Margin="5 0 5 0"
+            Width="12"
+            Height="12"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Left"/>
         <Button
-            x:Name="PanelTab"
+            x:Name="TabTitle"
             FontSize="11"
-            Padding="4 2"
+            Padding="20 2 20 2"
             HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
             Foreground="White"
             Background="#121220"/>
         <Button
-            x:Name="PanelClose"
-            Padding="4 2"
+            x:Name="TabClose"
+            Width="25"
+            Height="25"
             FontSize="11"
             HorizontalAlignment="Right"
+            VerticalAlignment="Center"
             Background="#121220">X</Button>
     </Panel>
 </UserControl>

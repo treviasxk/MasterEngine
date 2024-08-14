@@ -40,7 +40,7 @@ public partial class TabControl : UserControl{
     /// </summary>
     /// <param name="tab"></param>
     public void Select(Tab tab){
-        Console.WriteLine(tab.Title);
+        Console.WriteLine("Tab Selected: " + tab.Title);
         if(PanelTabs.Children.Contains(tab)){
             if(!PanelContent.Children.Contains(tab.Control))
                 PanelContent.Children.Add(tab.Control);
@@ -51,12 +51,12 @@ public partial class TabControl : UserControl{
 
                 for(int i = 0; i < PanelTabs.Children.Count; i++){
                     var tabTheme = (Tab)PanelTabs.Children[i];
-                    tabTheme.PanelTab.Background = new SolidColorBrush(Color.FromRgb(12,12,20));
-                    tabTheme.PanelClose.Background = new SolidColorBrush(Color.FromRgb(12,12,20));
+                    tabTheme.TabTitle.Background = new SolidColorBrush(Color.FromRgb(12,12,20));
+                    tabTheme.TabClose.Background = new SolidColorBrush(Color.FromRgb(12,12,20));
                 }
 
-                tab.PanelTab.Background = tab.Control.Background;
-                tab.PanelClose.Background = tab.Control.Background;
+                tab.TabTitle.Background = tab.Control.Background;
+                tab.TabClose.Background = tab.Control.Background;
 
                 tab.Control.IsVisible = true;
                 CurrentTab = tab;
@@ -146,7 +146,6 @@ public partial class TabControl : UserControl{
         tab.OnClose += Remove;
         tab.OnClick += Select;
         tab.PointerMoved += OnPointerMovedAsync;
-        Console.WriteLine(PanelTabs.Children.Count);
         PanelTabs.Children.Add(tab);
         Select(tab);
     }
