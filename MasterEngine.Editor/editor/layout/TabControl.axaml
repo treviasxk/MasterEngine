@@ -1,20 +1,19 @@
 <UserControl xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    x:Class="MasterEngine.Editor.Layout.TabControl"
-    Background="#090918">
+    x:Class="MasterEngine.Editor.Layout.TabControl">
     <DockPanel>
         <StackPanel
             x:Name="PanelTabs"
+            DragDrop.AllowDrop="True"
             Orientation="Horizontal"
             DockPanel.Dock="Top"
             Height="20"
             HorizontalAlignment="Stretch"
-            Background="Black">
-        </StackPanel>
-
-        <ContentControl
+            Background="Black"/>
+        <Panel
             x:Name="PanelContent"
             HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"/>
+            VerticalAlignment="Stretch"
+            Background="#121220"/>
     </DockPanel>
 </UserControl>

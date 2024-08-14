@@ -2,6 +2,7 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using MasterEngine.Editor;
+using MasterEngine.Editor.Layout;
 using MasterEngine.Graphic;
 using MasterEngine.Runtime;
 
@@ -20,14 +21,19 @@ public partial class EditorWindow : Window{
 
     private void OnLoaded(object? sender, RoutedEventArgs e){
         Window = this;
-        var SceneDock = new Editor.Layout.TabControl("Scene");
-        Viewport.Content = SceneDock;
-        var GameDock = new Editor.Layout.TabControl("Game");
-        SceneDock.Merge(GameDock);
-        TextBlock label = new TextBlock(){Text="dddddddd"};
-        GameDock.Control.Content = label;
+        var tabControl = new Editor.Layout.TabControl();
+        Tab Scene = new("Scene");
+        Tab Game = new("Game");
+        Tab Hierachy = new("Hierachy");
+        TextBlock textBlock = new(){Text = "Hello World!"};
+        Game.Control.Content = textBlock;
+        tabControl.Add(Scene);
+        tabControl.Add(Game);
+        tabControl.Add(Hierachy);
 
-        managerGraphic = new ManagerGraphic(SceneDock.Control, GraphicAPI.OpenGL);
+        PanelDock.Content = tabControl;
+
+        managerGraphic = new ManagerGraphic(Scene.Control, GraphicAPI.OpenGL);
         Title = Application.EngineName + " - " + managerGraphic?.API;
         managerGraphic!.GraphicComponent!.OnUpdate += OnUpdate;
         LabelStatusBarVersion.Text = Application.EngineVersion;

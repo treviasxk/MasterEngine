@@ -1,23 +1,24 @@
 <UserControl xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    x:Class="MasterEngine.Editor.Layout.Tab"
-    Background="#090918">
+    x:Class="MasterEngine.Editor.Layout.Tab">
     <Panel
+        DragDrop.AllowDrop="True"
         HorizontalAlignment="Left"
         Width="100"
-        Margin="2 0">
+        Margin="2 0"
+        Background="#121220">
         <Button
             x:Name="PanelTab"
             FontSize="11"
             Padding="4 2"
             HorizontalAlignment="Stretch"
             Foreground="White"
-            Background="#090915"/>
+            Background="#121220"/>
         <Button
             x:Name="PanelClose"
             Padding="4 2"
             FontSize="11"
             HorizontalAlignment="Right"
-            Background="#090915">X</Button>
+            Background="#121220">X</Button>
     </Panel>
 </UserControl>

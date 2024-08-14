@@ -4,14 +4,19 @@ using Avalonia.Interactivity;
 namespace MasterEngine.Editor.Layout;
 
 public partial class Tab : UserControl{
-    public string Title { get{return PanelTab.Content.ToString();} set{PanelTab.Content = value;} }
+    public string? Title { get{return PanelTab.Content!.ToString();} set{PanelTab.Content = value;} }
     public Action<Tab>? OnClick { get; set; }
     public Action<Tab>? OnClose { get; set; }
-    public TabControl TabControl { get; set; }
-    public Tab(string title, TabControl? tabControl = null){
+    public ContentControl Control {get;} = new();
+
+    /// <summary>
+    /// Tab to use in TabControl Master Engine.
+    /// </summary>
+    /// <param name="title"></param>
+    public Tab(string title){
         InitializeComponent();
+        Control.Background = PanelTab.Background;
         PanelTab.Content = title;
-        TabControl = tabControl == null ? new("New Tab") : tabControl;
         PanelTab.Click += Click;
         PanelClose.Click += Close;
     }

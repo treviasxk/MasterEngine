@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="MasterEngine.EditorWindow"
-        Title="MasterEngine">
+        Title="Master Engine">
         <DockPanel>
                 <Panel DockPanel.Dock="Top" Height="23">
                         <Menu Padding="5 0" HorizontalAlignment="Left" FontSize="11">
@@ -61,6 +61,6 @@
                                 <TextBlock x:Name="LabelStatusBarVersion"/>
                         </Menu>
                 </Panel>
-                <ContentControl x:Name="Viewport" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Black" />
+                <ContentControl x:Name="PanelDock" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Black" />
         </DockPanel>
 </Window>
