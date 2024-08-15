@@ -10,10 +10,17 @@
             Height="20"
             HorizontalAlignment="Stretch"
             Background="Black"/>
-        <Panel
+        <Panel 
             x:Name="PanelContent"
             HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            Background="#121220"/>
+            VerticalAlignment="Stretch">
+            <PathIcon
+                Foreground="#202025"
+                Width="256"
+                Height="256"
+                Data="{StaticResource Logo}"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch"/>
+        </Panel>
     </DockPanel>
 </UserControl>

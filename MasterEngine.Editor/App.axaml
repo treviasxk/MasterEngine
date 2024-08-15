@@ -6,5 +6,6 @@
 
     <Application.Styles>
         <FluentTheme />
+        <StyleInclude Source="avares://MasterEngine.Editor/editor/style/Icons.axaml" />
     </Application.Styles>
 </Application>

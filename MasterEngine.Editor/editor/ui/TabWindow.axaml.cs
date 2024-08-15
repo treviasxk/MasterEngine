@@ -1,5 +1,3 @@
-
-using System;
 using Avalonia.Controls;
 using MasterEngine.Editor.Layout;
 
@@ -17,7 +15,6 @@ public partial class TabWindow : Window{
 
     private void OnTabChanged(Tab tab){
         Title = tab.Title;
-        Console.WriteLine("c");
     }
 
     private void OnClosed(){

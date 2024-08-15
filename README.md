@@ -14,4 +14,4 @@ MasterEngine is the initial project of a Game Engine 3D cross-platform, built wi
 
 ## Frameworks
 * [Silk.net](https://github.com/dotnet/Silk.NET) - v2.21.0
-* [Avalonia](https://github.com/AvaloniaUI/Avalonia) - v11.1.0
+* [Avalonia](https://github.com/AvaloniaUI/Avalonia) - v11.1.3

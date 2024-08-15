@@ -24,7 +24,7 @@ public partial class EditorWindow : Window{
         var tabControl = new Editor.Layout.TabControl();
         Tab Scene = new("Scene");
         Tab Game = new("Game");
-        Tab hierarchy = new("hierarchy");
+        Tab hierarchy = new("Hierarchy");
         TextBlock textBlock = new(){Text = "Hello World!"};
         Game.Control.Content = textBlock;
         tabControl.Add(Scene);
