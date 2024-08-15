@@ -21,6 +21,11 @@ public partial class EditorWindow : Window{
 
     private void OnLoaded(object? sender, RoutedEventArgs e){
         Window = this;
+
+        var GridDock = new GridDock();
+
+        PanelDock.Content = GridDock;
+
         var tabControl = new Editor.Layout.TabControl();
         Tab Scene = new("Scene");
         Tab Game = new("Game");
@@ -31,9 +36,36 @@ public partial class EditorWindow : Window{
         tabControl.Add(Game);
         tabControl.Add(hierarchy);
 
-        PanelDock.Content = tabControl;
+        var tabControl2 = new Editor.Layout.TabControl();
+        Tab Explorer = new("Explorer");
+        Tab Inspector = new("Inspector");
 
-        managerGraphic = new ManagerGraphic(Scene.Control, GraphicAPI.OpenGL);
+        tabControl2.Add(Explorer);
+        tabControl2.Add(Inspector);
+
+        var GridDock2 = new GridDock();
+
+        var tabControl3 = new Editor.Layout.TabControl();
+        Tab Console = new("Console");
+        Tab Animation = new("Animation");
+        tabControl3.Add(Console);
+        tabControl3.Add(Animation);
+
+        var tabControl4 = new Editor.Layout.TabControl();
+        Tab Shader = new("Shader Graph");
+        Tab Audio = new("Audio Mixer");
+        tabControl4.Add(Shader);
+        tabControl4.Add(Audio);
+
+        GridDock.Add(tabControl, GridDock.DockAlign.Right);
+        GridDock.Add(tabControl2, GridDock.DockAlign.Right);
+        GridDock.Add(GridDock2, GridDock.DockAlign.Right);
+
+        GridDock2.Add(tabControl3, GridDock.DockAlign.Bottom);
+        GridDock2.Add(tabControl4, GridDock.DockAlign.Bottom);
+        GridDock2.OnClose += ()=>{GridDock.Remove(GridDock2);};
+
+        managerGraphic = new ManagerGraphic(Scene.Control, GraphicAPI.Direct3D11);
         Title = Application.EngineName + " - " + managerGraphic?.API;
         managerGraphic!.GraphicComponent!.OnUpdate += OnUpdate;
         LabelStatusBarVersion.Text = Application.EngineVersion;

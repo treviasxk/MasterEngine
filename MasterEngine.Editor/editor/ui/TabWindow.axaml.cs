@@ -1,11 +1,12 @@
 using Avalonia.Controls;
 using MasterEngine.Editor.Layout;
+using TabControl = MasterEngine.Editor.Layout.TabControl;
 
 namespace MasterEngine;
 public partial class TabWindow : Window{
     public TabWindow(Tab tab){
         InitializeComponent();
-        var tabControl = new Editor.Layout.TabControl();
+        var tabControl = new TabControl();
         tabControl.Add(tab);
         tabControl.OnClose += OnClosed;
         tabControl.OnTabChanged += OnTabChanged;
@@ -17,7 +18,7 @@ public partial class TabWindow : Window{
         Title = tab.Title;
     }
 
-    private void OnClosed(){
+    private void OnClosed(TabControl tabControl){
         Close();
     }
 }

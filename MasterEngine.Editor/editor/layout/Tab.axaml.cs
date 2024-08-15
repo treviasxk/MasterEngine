@@ -4,9 +4,21 @@ using Avalonia.Interactivity;
 namespace MasterEngine.Editor.Layout;
 
 public partial class Tab : UserControl{
+    /// <summary>
+    /// Get Tab title.
+    /// </summary>
     public string? Title { get{return TabTitle.Text!.ToString();} set{TabTitle.Text = value;} }
+    /// <summary>
+    /// Click Tab.
+    /// </summary>
     public Action<Tab>? OnClick { get; set; }
+    /// <summary>
+    /// The event is called when it tab is closed.
+    /// </summary>
     public Action<Tab>? OnClose { get; set; }
+    /// <summary>
+    /// Get Tab content.
+    /// </summary>
     public ContentControl Control {get;} = new();
 
     /// <summary>

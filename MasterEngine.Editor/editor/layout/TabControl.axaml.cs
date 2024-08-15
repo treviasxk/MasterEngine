@@ -17,7 +17,7 @@ public partial class TabControl : UserControl{
     /// <summary>
     /// The event is called when all tabs are closed.
     /// </summary>
-    public Action? OnClose { get; set; }
+    public Action<TabControl>? OnClose { get; set; }
     /// <summary>
     /// The event is called when an new Tab are selected.
     /// </summary>
@@ -48,7 +48,6 @@ public partial class TabControl : UserControl{
             }
 
             if(CurrentTab != tab){
-                Console.WriteLine(CurrentTab);
                 if(CurrentTab != null)
                     CurrentTab.Control.IsVisible = false;
 
@@ -190,7 +189,7 @@ public partial class TabControl : UserControl{
             if(PanelTabs.Children.Count > 0)
                 Select((Tab)PanelTabs.Children[0]);
             else
-                OnClose?.Invoke();
+                OnClose?.Invoke(this);
         }
 
         PanelContent.UpdateLayout();

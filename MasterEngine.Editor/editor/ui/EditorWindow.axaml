@@ -61,6 +61,6 @@
                                 <TextBlock x:Name="LabelStatusBarVersion"/>
                         </Menu>
                 </Panel>
-                <ContentControl x:Name="PanelDock" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Black" />
+                <ContentControl DragDrop.AllowDrop="True" x:Name="PanelDock" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Black" />
         </DockPanel>
 </Window>

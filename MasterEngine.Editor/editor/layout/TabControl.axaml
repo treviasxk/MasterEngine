@@ -3,6 +3,7 @@
     x:Class="MasterEngine.Editor.Layout.TabControl">
     <DockPanel>
         <StackPanel
+            ZIndex="1"
             x:Name="PanelTabs"
             DragDrop.AllowDrop="True"
             Orientation="Horizontal"
@@ -15,6 +16,7 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
             <PathIcon
+                ZIndex="0"
                 Foreground="#202025"
                 Width="256"
                 Height="256"

@@ -27,6 +27,7 @@
             Foreground="White"
             Background="#121220"/>
         <TextBlock
+            Cursor="Hand"
             x:Name="TabClose"
             Width="10"
             Height="10"
