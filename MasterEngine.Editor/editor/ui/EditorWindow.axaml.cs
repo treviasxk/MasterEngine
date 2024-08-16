@@ -5,6 +5,7 @@ using MasterEngine.Editor;
 using MasterEngine.Editor.Layout;
 using MasterEngine.Graphic;
 using MasterEngine.Runtime;
+using TabControl = MasterEngine.Editor.Layout.TabControl;
 
 namespace MasterEngine;
 public partial class EditorWindow : Window{
@@ -26,7 +27,7 @@ public partial class EditorWindow : Window{
 
         PanelDock.Content = GridDock;
 
-        var tabControl = new Editor.Layout.TabControl();
+        var tabControl = new TabControl();
         Tab Scene = new("Scene");
         Tab Game = new("Game");
         Tab hierarchy = new("Hierarchy");
@@ -36,7 +37,7 @@ public partial class EditorWindow : Window{
         tabControl.Add(Game);
         tabControl.Add(hierarchy);
 
-        var tabControl2 = new Editor.Layout.TabControl();
+        var tabControl2 = new TabControl();
         Tab Explorer = new("Explorer");
         Tab Inspector = new("Inspector");
 
@@ -45,21 +46,21 @@ public partial class EditorWindow : Window{
 
         var GridDock2 = new GridDock();
 
-        var tabControl3 = new Editor.Layout.TabControl();
+        var tabControl3 = new TabControl();
         Tab Console = new("Console");
         Tab Animation = new("Animation");
         tabControl3.Add(Console);
         tabControl3.Add(Animation);
 
-        var tabControl4 = new Editor.Layout.TabControl();
+        var tabControl4 = new TabControl();
         Tab Shader = new("Shader Graph");
         Tab Audio = new("Audio Mixer");
         tabControl4.Add(Shader);
         tabControl4.Add(Audio);
 
-        GridDock.Add(tabControl, GridDock.DockAlign.Right);
+        GridDock.Add(tabControl, GridDock.DockAlign.Bottom);
         GridDock.Add(tabControl2, GridDock.DockAlign.Bottom);
-        GridDock.Add(GridDock2, GridDock.DockAlign.Bottom);
+        GridDock.Add(GridDock2, GridDock.DockAlign.Top);
 
         GridDock2.Add(tabControl3, GridDock.DockAlign.Right);
         GridDock2.Add(tabControl4, GridDock.DockAlign.Right);

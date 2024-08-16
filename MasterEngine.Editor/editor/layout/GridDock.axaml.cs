@@ -8,6 +8,8 @@ using Avalonia.Media;
 namespace MasterEngine.Editor.Layout;
 public partial class GridDock : UserControl{
     public enum DockAlign {Top, Bottom, Left, Right, Center};
+    public enum GridAlign {Horizontal, Vertical};
+
     public int ID {get;}
     static int instance;
     List<ContentControl> DockHorizontal = [];
@@ -35,15 +37,17 @@ public partial class GridDock : UserControl{
                     Background = new SolidColorBrush(Colors.Black),
                     ResizeDirection = GridResizeDirection.Columns
                 };
+                
                 gridsplite.SetValue(Grid.ColumnProperty, column);
                 Dock.Children.Add(gridsplite);
                 column++;
             }
+            
 
             // Add style to Control
             var controlColumnDefinition = new ColumnDefinition{
                 Width = GridLength.Star,
-                MinWidth = 200
+                MinWidth = 100
             };
 
             Dock.ColumnDefinitions.Add(controlColumnDefinition);
@@ -71,26 +75,25 @@ public partial class GridDock : UserControl{
             // Add style to Control
             var ControlRowDefinition = new RowDefinition{
                 Height = GridLength.Star,
-                MinHeight = 200
+                MinHeight = 100
             };
 
             Dock.RowDefinitions.Add(ControlRowDefinition);
             item.SetValue(Grid.RowProperty, rows);
+            
             // Add Control to Dock
             Dock.Children.Add(item);
             rows++;
         }
+
     }
 
-    public void AddRange(List<ContentControl> controls, DockAlign align){
-        switch(align){
-            case DockAlign.Right:
-                DockHorizontal.AddRange(controls);
-            break;
-            case DockAlign.Bottom:
-                DockVertical.AddRange(controls);
-            break;
-        }
+    public void AddRange(List<ContentControl> controls, GridAlign align){
+        if(align == GridAlign.Vertical)
+            DockVertical.AddRange(controls);
+
+        if(align == GridAlign.Horizontal)
+            DockHorizontal.AddRange(controls);
 
         foreach(var control in controls){
             if(control is TabControl)
@@ -103,50 +106,49 @@ public partial class GridDock : UserControl{
     }
 
     public void Add(ContentControl control, DockAlign align){
-        switch(align){
-            case DockAlign.Right:
-                if(DockVertical.Count == 0)
-                    DockHorizontal.Add(control);
-                else{
-                    var grid = new GridDock();
-                    var list = DockVertical.ToList();
-                    Clear();
+        if(align == DockAlign.Right || align == DockAlign.Left)
+            if(DockVertical.Count == 0)
+                DockHorizontal.Insert(align == DockAlign.Right ? DockVertical.Count : 0, control);
+            else{
+                var grid = new GridDock();
 
-                    if(list.Count == 1){
-                        list.Add(control);
-                        grid.AddRange(list, align);
-                        DockHorizontal.AddRange(new List<ContentControl>(){grid});
-                    }else{
-                        grid.AddRange(list, DockAlign.Bottom);
-                        DockHorizontal.AddRange(new List<ContentControl>(){grid, control});
-                    }
+                // Backup list before clean
+                var list = DockVertical.ToList();
+                Clear();
 
-                    UpdateDock();
-                    return;
+                if(list.Count == 1){
+                    list.Add(control);
+                    grid.AddRange(list, GridAlign.Horizontal);
+                    DockHorizontal.AddRange(new List<ContentControl>(){grid});
+                }else{
+                    grid.AddRange(list, GridAlign.Vertical);
+                    DockHorizontal.AddRange(align == DockAlign.Right ? new List<ContentControl>(){grid, control} : new List<ContentControl>(){control, grid});
                 }
-            break;
-            case DockAlign.Bottom:
-                if(DockHorizontal.Count == 0)
-                    DockVertical.Add(control);
-                else{
-                    var grid = new GridDock();
-                    var list = DockHorizontal.ToList();
-                    Clear();
+                return;
+            }
 
-                    if(list.Count == 1){
-                        list.Add(control);
-                        grid.AddRange(list, align);
-                        DockVertical.AddRange(new List<ContentControl>(){grid});
-                    }else{
-                        grid.AddRange(list, DockAlign.Right);
-                        DockVertical.AddRange(new List<ContentControl>(){grid, control});
-                    }
+        if(align == DockAlign.Top || align == DockAlign.Bottom)
+            if(DockHorizontal.Count == 0)
+                DockVertical.Insert(align == DockAlign.Bottom ? DockHorizontal.Count : 0, control);
+            else{
+                var grid = new GridDock();
 
-                    UpdateDock();
-                    return;
+                // Backup list before clean
+                var list = DockHorizontal.ToList();
+                Clear();
+
+                if(list.Count == 1){
+                    list.Add(control);
+                    grid.AddRange(list, GridAlign.Vertical);
+                    DockVertical.AddRange(new List<ContentControl>(){grid});
+                }else{
+                    grid.AddRange(list, GridAlign.Horizontal);
+                    DockVertical.AddRange(align == DockAlign.Bottom ? new List<ContentControl>(){grid, control} : new List<ContentControl>(){control, grid});
                 }
-            break;
-        }
+
+                UpdateDock();
+                return;
+            }
 
         if(control is TabControl)
             ((TabControl)control).OnClose += Remove;
