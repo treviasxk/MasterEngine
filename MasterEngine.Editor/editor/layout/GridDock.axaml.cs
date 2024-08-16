@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Media;
 
@@ -9,21 +10,13 @@ public partial class GridDock : UserControl{
     public enum DockAlign {Top, Bottom, Left, Right, Center};
     public int ID {get;}
     static int instance;
-    List<ContentControl> DockHorizontal = new();
-    List<ContentControl> DockVertical = new();
-    public Action? OnClose;
+    List<ContentControl> DockHorizontal = [];
+    List<ContentControl> DockVertical = [];
+    public Action<GridDock>? OnClose;
 
     public GridDock(){
         InitializeComponent();
         ID = instance++;
-    }
-
-    private void Close(TabControl tabControl){
-        DockHorizontal.Remove(tabControl);
-        DockVertical.Remove(tabControl);
-        if(DockHorizontal.Count == 0 && DockVertical.Count == 0)
-            OnClose?.Invoke();
-        UpdateDock();
     }
 
     private void UpdateDock(){
@@ -89,24 +82,106 @@ public partial class GridDock : UserControl{
         }
     }
 
-    public void Add(ContentControl control, DockAlign align){
-        if(align == DockAlign.Right){
-            DockHorizontal.Add(control);
-            UpdateDock();
+    public void AddRange(List<ContentControl> controls, DockAlign align){
+        switch(align){
+            case DockAlign.Right:
+                DockHorizontal.AddRange(controls);
+            break;
+            case DockAlign.Bottom:
+                DockVertical.AddRange(controls);
+            break;
         }
 
-        if(align == DockAlign.Bottom){
-            DockVertical.Add(control);
-            UpdateDock();
+        foreach(var control in controls){
+            if(control is TabControl)
+                ((TabControl)control).OnClose += Remove;
+
+            if(control is GridDock gridDock)
+                gridDock.OnClose += Remove;
+        }
+        UpdateDock();
+    }
+
+    public void Add(ContentControl control, DockAlign align){
+        switch(align){
+            case DockAlign.Right:
+                if(DockVertical.Count == 0)
+                    DockHorizontal.Add(control);
+                else{
+                    var grid = new GridDock();
+                    var list = DockVertical.ToList();
+                    Clear();
+
+                    if(list.Count == 1){
+                        list.Add(control);
+                        grid.AddRange(list, align);
+                        DockHorizontal.AddRange(new List<ContentControl>(){grid});
+                    }else{
+                        grid.AddRange(list, DockAlign.Bottom);
+                        DockHorizontal.AddRange(new List<ContentControl>(){grid, control});
+                    }
+
+                    UpdateDock();
+                    return;
+                }
+            break;
+            case DockAlign.Bottom:
+                if(DockHorizontal.Count == 0)
+                    DockVertical.Add(control);
+                else{
+                    var grid = new GridDock();
+                    var list = DockHorizontal.ToList();
+                    Clear();
+
+                    if(list.Count == 1){
+                        list.Add(control);
+                        grid.AddRange(list, align);
+                        DockVertical.AddRange(new List<ContentControl>(){grid});
+                    }else{
+                        grid.AddRange(list, DockAlign.Right);
+                        DockVertical.AddRange(new List<ContentControl>(){grid, control});
+                    }
+
+                    UpdateDock();
+                    return;
+                }
+            break;
         }
 
         if(control is TabControl)
-            ((TabControl)control).OnClose = Close;
+            ((TabControl)control).OnClose += Remove;
+
+        if(control is GridDock gridDock)
+            gridDock.OnClose += Remove;
+
+        UpdateDock();
+    }
+
+    public void Clear(){
+        foreach(var control in DockHorizontal.ToList())
+            OnlyRemove(control);
+
+        foreach(var control in DockVertical.ToList())
+            OnlyRemove(control);
+
+        UpdateDock();
     }
 
     public void Remove(ContentControl control){
+        OnlyRemove(control);
+        UpdateDock();
+    }
+
+    void OnlyRemove(ContentControl control){
+        if(control is TabControl)
+            ((TabControl)control).OnClose -= Remove;
+
+        if(control is GridDock gridDock)
+            gridDock.OnClose -= Remove;
+
         DockHorizontal.Remove(control);
         DockVertical.Remove(control);
-        UpdateDock();
+        if(DockHorizontal.Count == 0 && DockVertical.Count == 0)
+            OnClose?.Invoke(this);
     }
 }

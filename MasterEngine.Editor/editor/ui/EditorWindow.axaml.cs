@@ -58,12 +58,11 @@ public partial class EditorWindow : Window{
         tabControl4.Add(Audio);
 
         GridDock.Add(tabControl, GridDock.DockAlign.Right);
-        GridDock.Add(tabControl2, GridDock.DockAlign.Right);
-        GridDock.Add(GridDock2, GridDock.DockAlign.Right);
+        GridDock.Add(tabControl2, GridDock.DockAlign.Bottom);
+        GridDock.Add(GridDock2, GridDock.DockAlign.Bottom);
 
-        GridDock2.Add(tabControl3, GridDock.DockAlign.Bottom);
-        GridDock2.Add(tabControl4, GridDock.DockAlign.Bottom);
-        GridDock2.OnClose += ()=>{GridDock.Remove(GridDock2);};
+        GridDock2.Add(tabControl3, GridDock.DockAlign.Right);
+        GridDock2.Add(tabControl4, GridDock.DockAlign.Right);
 
         managerGraphic = new ManagerGraphic(Scene.Control, GraphicAPI.Direct3D11);
         Title = Application.EngineName + " - " + managerGraphic?.API;
