@@ -61,6 +61,21 @@
                                 <TextBlock x:Name="LabelStatusBarVersion"/>
                         </Menu>
                 </Panel>
-                <ContentControl DragDrop.AllowDrop="True" x:Name="PanelDock" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Black" />
+                <Grid>
+                        <!--Logo Master Engine-->
+                        <Panel
+                                VerticalAlignment="Stretch"
+                                HorizontalAlignment="Stretch">
+                        <PathIcon
+                                Foreground="#202025"
+                                Width="256"
+                                Height="256"
+                                Data="{StaticResource Logo}"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"/>
+                        </Panel>
+                        <!--Content Editor-->
+                        <ContentControl x:Name="PanelDock" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                </Grid>
         </DockPanel>
 </Window>

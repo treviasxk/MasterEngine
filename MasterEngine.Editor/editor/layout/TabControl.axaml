@@ -15,14 +15,6 @@
             x:Name="PanelContent"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
-            <PathIcon
-                ZIndex="0"
-                Foreground="#202025"
-                Width="256"
-                Height="256"
-                Data="{StaticResource Logo}"
-                VerticalAlignment="Stretch"
-                HorizontalAlignment="Stretch"/>
         </Panel>
     </DockPanel>
 </UserControl>

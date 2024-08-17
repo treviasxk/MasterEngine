@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Media;
 
 namespace MasterEngine.Editor.Layout;
@@ -47,7 +48,7 @@ public partial class GridDock : UserControl{
             // Add style to Control
             var controlColumnDefinition = new ColumnDefinition{
                 Width = GridLength.Star,
-                MinWidth = 100
+                MinWidth = 200
             };
 
             Dock.ColumnDefinitions.Add(controlColumnDefinition);
@@ -108,50 +109,36 @@ public partial class GridDock : UserControl{
     public void Add(ContentControl control, DockAlign align){
         if(align == DockAlign.Right || align == DockAlign.Left)
             if(DockVertical.Count == 0)
-                DockHorizontal.Insert(align == DockAlign.Right ? DockVertical.Count : 0, control);
+                DockHorizontal.Insert(align == DockAlign.Right ? DockHorizontal.Count : 0, control);
             else{
-                var grid = new GridDock();
-
-                // Backup list before clean
-                var list = DockVertical.ToList();
+                List<ContentControl> listH = DockHorizontal.ToList(), listV = DockVertical.ToList();
+                listH.Insert(align == DockAlign.Right ? listH.Count : 0, control);
                 Clear();
-
-                if(list.Count == 1){
-                    list.Add(control);
-                    grid.AddRange(list, GridAlign.Horizontal);
-                    DockHorizontal.AddRange(new List<ContentControl>(){grid});
-                }else{
-                    grid.AddRange(list, GridAlign.Vertical);
-                    DockHorizontal.AddRange(align == DockAlign.Right ? new List<ContentControl>(){grid, control} : new List<ContentControl>(){control, grid});
-                }
+                GridDock gridH = new(), gridV = new();
+                gridH.AddRange(listH, GridAlign.Horizontal);
+                gridV.AddRange(listV, GridAlign.Vertical);
+                AddRange(align == DockAlign.Right ? new List<ContentControl>(){gridV, gridH} : new List<ContentControl>(){gridH, gridV}, GridAlign.Horizontal);
                 return;
             }
 
-        if(align == DockAlign.Top || align == DockAlign.Bottom)
+        if(align == DockAlign.Bottom || align == DockAlign.Top)
             if(DockHorizontal.Count == 0)
-                DockVertical.Insert(align == DockAlign.Bottom ? DockHorizontal.Count : 0, control);
+                DockVertical.Insert(align == DockAlign.Bottom ? DockVertical.Count : 0, control);
             else{
-                var grid = new GridDock();
-
-                // Backup list before clean
-                var list = DockHorizontal.ToList();
+                List<ContentControl> listH = DockHorizontal.ToList(), listV = DockVertical.ToList();
+                listV.Insert(align == DockAlign.Bottom ? listV.Count : 0, control);
                 Clear();
-
-                if(list.Count == 1){
-                    list.Add(control);
-                    grid.AddRange(list, GridAlign.Vertical);
-                    DockVertical.AddRange(new List<ContentControl>(){grid});
-                }else{
-                    grid.AddRange(list, GridAlign.Horizontal);
-                    DockVertical.AddRange(align == DockAlign.Bottom ? new List<ContentControl>(){grid, control} : new List<ContentControl>(){control, grid});
-                }
-
-                UpdateDock();
+                GridDock gridH = new(), gridV = new();
+                gridH.AddRange(listH, GridAlign.Horizontal);
+                gridV.AddRange(listV, GridAlign.Vertical);
+                AddRange(align == DockAlign.Bottom ? new List<ContentControl>(){gridH, gridV} : new List<ContentControl>(){gridV, gridH}, GridAlign.Vertical);
                 return;
             }
 
-        if(control is TabControl)
+        if(control is TabControl){
+            ((TabControl)control).GridDock = this;
             ((TabControl)control).OnClose += Remove;
+        }
 
         if(control is GridDock gridDock)
             gridDock.OnClose += Remove;
@@ -175,9 +162,10 @@ public partial class GridDock : UserControl{
     }
 
     void OnlyRemove(ContentControl control){
-        if(control is TabControl)
+        if(control is TabControl){
             ((TabControl)control).OnClose -= Remove;
-
+        }
+        
         if(control is GridDock gridDock)
             gridDock.OnClose -= Remove;
 

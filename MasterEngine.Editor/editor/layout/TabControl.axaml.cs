@@ -22,7 +22,7 @@ public partial class TabControl : UserControl{
     /// The event is called when an new Tab are selected.
     /// </summary>
     public Action<Tab>? OnTabChanged { get; set; }
-
+    public GridDock? GridDock { get; set; }
     static int Instance = 0;
 
     /// <summary>
@@ -67,10 +67,7 @@ public partial class TabControl : UserControl{
         }
     }
 
-    public void Merge(TabControl tabControl){
-        //Add(new Tab(tabControl.Tab.Title, tabControl));
-    }
-
+    enum AlignMerge {}
     // Data transferer in dragdrop
     class TabData{
         public required int id;
@@ -78,6 +75,7 @@ public partial class TabControl : UserControl{
         public required Tab tab;
         public required Point point;
         public bool move;
+        public GridDock.DockAlign merge;
     }
 
     private async void OnPointerMovedAsync(object? sender, PointerEventArgs e){
@@ -101,8 +99,17 @@ public partial class TabControl : UserControl{
                     Console.WriteLine("Created TabControl in window!");
                 }
             }
-            if(result == DragDropEffects.Move){
+            if(result == DragDropEffects.Move){               
                 if(dataObject.Get("Tab") is TabData tabData)
+                    if(tabData.merge != GridDock.DockAlign.Center && tabData.merge != GridDock.DockAlign.Top){
+                        if(tabData.tabControl != null && tabData.tabControl.GridDock != null){
+                            Console.WriteLine("Merge Tab {0} in {1}", tabData.tabControl!.ID, tabData.merge);
+                            Remove(tab);
+                            var newTabControl = new TabControl();
+                            newTabControl.Add(tab);
+                            tabData.tabControl.GridDock.Add(newTabControl, tabData.merge);
+                        }
+                    }else
                     if(tabData.move){
                         Console.WriteLine("Changed Tab from TabControl from: {0}, to: {1}", tabData.tabControl!.ID, ID);
                         // Remove from current TabControl run dragdrop
@@ -121,7 +128,28 @@ public partial class TabControl : UserControl{
     private void OnDragOverEvent(object? sender, DragEventArgs e){
         // Check drag holding tab
         if(e.Data.Get("Tab") is TabData tabData){
-            var mousePos = e.GetPosition(PanelTabs) - tabData.point;
+            var mousePos = e.GetPosition(this);
+
+            var areaW = Bounds.Width / 100 * 15;
+            var areaH = Bounds.Height / 100 * 15;
+
+            if(mousePos.X < areaW)
+                tabData.merge = GridDock.DockAlign.Left;
+            else
+            if(mousePos.Y < areaH)
+                tabData.merge = GridDock.DockAlign.Top;
+            else
+            if(mousePos.X > Bounds.Width - areaW)
+                tabData.merge = GridDock.DockAlign.Right;
+            else
+            if(mousePos.Y > Bounds.Height - areaH)
+                tabData.merge = GridDock.DockAlign.Bottom;
+            else{
+                tabData.tabControl = this;
+                tabData.merge = GridDock.DockAlign.Center;
+            }
+
+            mousePos = e.GetPosition(PanelTabs) - tabData.point;
             if(PanelTabs.Children.Contains(tabData.tab))
                 tabData.tab.RenderTransform = new TranslateTransform(mousePos.X - tabData.tab.Bounds.X, tabData.tab.Bounds.Y);
         }

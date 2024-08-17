@@ -7,7 +7,7 @@ public partial class Tab : UserControl{
     /// <summary>
     /// Get Tab title.
     /// </summary>
-    public string? Title { get{return TabTitle.Text!.ToString();} set{TabTitle.Text = value;} }
+    public string Title { get{return TabTitle.Text!.ToString();} set{TabTitle.Text = value; TabTitle.SetValue(ToolTip.TipProperty, value);} }
     /// <summary>
     /// Click Tab.
     /// </summary>
@@ -27,9 +27,9 @@ public partial class Tab : UserControl{
     /// <param name="title"></param>
     public Tab(string title){
         InitializeComponent();
+        Title = title;
         TabIcon.Data = AppIcons.GetIcon(title);
         Control.Background = TabTitle.Background;
-        TabTitle.Text = title;
         TabIcon.PointerPressed += Click;
         TabTitle.PointerPressed += Click;
         TabClose.PointerPressed += Close;

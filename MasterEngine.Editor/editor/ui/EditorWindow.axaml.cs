@@ -15,6 +15,7 @@ public partial class EditorWindow : Window{
     public EditorWindow(){
         Debug.Log("Initializing UI...");
         InitializeComponent();
+        LabelStatusBarVersion.Text = Application.EngineVersion;
         Loaded += OnLoaded;
         Closing += OnClosing;
     }
@@ -65,10 +66,19 @@ public partial class EditorWindow : Window{
         GridDock2.Add(tabControl3, GridDock.DockAlign.Right);
         GridDock2.Add(tabControl4, GridDock.DockAlign.Right);
 
+        TabControl tabControl5 = new();
+        Tab teste = new("Teste");
+        Tab teste2 = new("Teste2");
+        tabControl5.Add(teste);
+        tabControl5.Add(teste2);
+        GridDock.Add(tabControl5, GridDock.DockAlign.Right);
+
+
+/*
         managerGraphic = new ManagerGraphic(Scene.Control, GraphicAPI.Direct3D11);
         Title = Application.EngineName + " - " + managerGraphic?.API;
-        managerGraphic!.GraphicComponent!.OnUpdate += OnUpdate;
-        LabelStatusBarVersion.Text = Application.EngineVersion;
+        managerGraphic!.GraphicComponent!.OnUpdate += OnUpdate;*/
+        
     }
 
     private void OnUpdate(double obj){
