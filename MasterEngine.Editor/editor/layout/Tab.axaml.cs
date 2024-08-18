@@ -21,6 +21,8 @@ public partial class Tab : UserControl{
     /// </summary>
     public ContentControl Control {get;} = new();
 
+    public TabControl? TabControl { get; set; }
+
     /// <summary>
     /// Tab to use in TabControl Master Engine.
     /// </summary>

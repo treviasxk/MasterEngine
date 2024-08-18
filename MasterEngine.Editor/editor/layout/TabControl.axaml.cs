@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Media;
 
@@ -23,6 +25,7 @@ public partial class TabControl : UserControl{
     /// </summary>
     public Action<Tab>? OnTabChanged { get; set; }
     public GridDock? GridDock { get; set; }
+    public Tab[] Tabs {get {return (Tab[])PanelTabs.Children.ToArray(); }}
     static int Instance = 0;
 
     /// <summary>
@@ -75,7 +78,7 @@ public partial class TabControl : UserControl{
         public required Tab tab;
         public required Point point;
         public bool move;
-        public GridDock.DockAlign merge;
+        public GridDock.GridAlign merge;
     }
 
     private async void OnPointerMovedAsync(object? sender, PointerEventArgs e){
@@ -101,13 +104,24 @@ public partial class TabControl : UserControl{
             }
             if(result == DragDropEffects.Move){               
                 if(dataObject.Get("Tab") is TabData tabData)
-                    if(tabData.merge != GridDock.DockAlign.Center && tabData.merge != GridDock.DockAlign.Top){
+                    if(tabData.merge != GridDock.GridAlign.Top){
                         if(tabData.tabControl != null && tabData.tabControl.GridDock != null){
-                            Console.WriteLine("Merge Tab {0} in {1}", tabData.tabControl!.ID, tabData.merge);
-                            Remove(tab);
-                            var newTabControl = new TabControl();
-                            newTabControl.Add(tab);
-                            tabData.tabControl.GridDock.Add(newTabControl, tabData.merge);
+                            if(tabData.tabControl.PanelTabs.Children.Count > 1){
+                                Console.WriteLine("Merge Tab {0} in {1} {2}", tabData.tabControl!.ID, tabData.merge, tabData.tabControl.GridDock.ID);
+                                Remove(tab);
+                                var index = tabData.tabControl.GridDock.GetIndex(tabData.tabControl);
+
+                                var gridDock = tabData.tabControl.GridDock;
+                                tabData.tabControl.GridDock.Remove(tabData.tabControl);
+
+                                var tabControl = new TabControl();
+                                tabControl.Add(tab);
+                                var grid = new GridDock(){Align = tabData.merge};
+                                
+                                grid.Add(tabData.tabControl);
+                                grid.Add(tabControl); 
+                                gridDock.Add(grid, index);
+                            }
                         }
                     }else
                     if(tabData.move){
@@ -134,19 +148,18 @@ public partial class TabControl : UserControl{
             var areaH = Bounds.Height / 100 * 15;
 
             if(mousePos.X < areaW)
-                tabData.merge = GridDock.DockAlign.Left;
+                tabData.merge = GridDock.GridAlign.Left;
             else
             if(mousePos.Y < areaH)
-                tabData.merge = GridDock.DockAlign.Top;
+                tabData.merge = GridDock.GridAlign.Top;
             else
             if(mousePos.X > Bounds.Width - areaW)
-                tabData.merge = GridDock.DockAlign.Right;
+                tabData.merge = GridDock.GridAlign.Right;
             else
             if(mousePos.Y > Bounds.Height - areaH)
-                tabData.merge = GridDock.DockAlign.Bottom;
+                tabData.merge = GridDock.GridAlign.Bottom;
             else{
                 tabData.tabControl = this;
-                tabData.merge = GridDock.DockAlign.Center;
             }
 
             mousePos = e.GetPosition(PanelTabs) - tabData.point;
@@ -191,6 +204,7 @@ public partial class TabControl : UserControl{
         tab.OnClose += Remove;
         tab.OnClick += Select;
         tab.PointerMoved += OnPointerMovedAsync;
+        tab.TabControl = this;
         PanelTabs.Children.Add(tab);
         Select(tab);
     }
@@ -210,6 +224,7 @@ public partial class TabControl : UserControl{
         tab.OnClose -= Remove;
         tab.OnClick -= Select;
         tab.PointerMoved -= OnPointerMovedAsync;
+        tab.TabControl = null;
         PanelContent.Children.Remove(tab.Control);
         PanelTabs.Children.Remove(tab);
 

@@ -24,9 +24,9 @@ public partial class EditorWindow : Window{
     private void OnLoaded(object? sender, RoutedEventArgs e){
         Window = this;
 
-        var GridDock = new GridDock();
+        var gridDock = new GridDock();
+        PanelDock.Content = gridDock;
 
-        PanelDock.Content = GridDock;
 
         var tabControl = new TabControl();
         Tab Scene = new("Scene");
@@ -38,6 +38,7 @@ public partial class EditorWindow : Window{
         tabControl.Add(Game);
         tabControl.Add(hierarchy);
 
+        gridDock.Add(tabControl);
         var tabControl2 = new TabControl();
         Tab Explorer = new("Explorer");
         Tab Inspector = new("Inspector");
@@ -45,20 +46,23 @@ public partial class EditorWindow : Window{
         tabControl2.Add(Explorer);
         tabControl2.Add(Inspector);
 
-        var GridDock2 = new GridDock();
-
+        gridDock.Add(tabControl2);
         var tabControl3 = new TabControl();
         Tab Console = new("Console");
         Tab Animation = new("Animation");
         tabControl3.Add(Console);
         tabControl3.Add(Animation);
+        gridDock.Add(tabControl3);
 
         var tabControl4 = new TabControl();
         Tab Shader = new("Shader Graph");
         Tab Audio = new("Audio Mixer");
         tabControl4.Add(Shader);
         tabControl4.Add(Audio);
+        gridDock.Add(tabControl4);
 
+
+/*
         GridDock.Add(tabControl, GridDock.DockAlign.Bottom);
         GridDock.Add(tabControl2, GridDock.DockAlign.Bottom);
         GridDock.Add(GridDock2, GridDock.DockAlign.Top);
@@ -66,12 +70,14 @@ public partial class EditorWindow : Window{
         GridDock2.Add(tabControl3, GridDock.DockAlign.Right);
         GridDock2.Add(tabControl4, GridDock.DockAlign.Right);
 
+        var GridDock3 = new GridDock();
         TabControl tabControl5 = new();
         Tab teste = new("Teste");
         Tab teste2 = new("Teste2");
         tabControl5.Add(teste);
         tabControl5.Add(teste2);
-        GridDock.Add(tabControl5, GridDock.DockAlign.Right);
+        GridDock3.Add(tabControl5, GridDock.DockAlign.Right);
+        GridDock.Add(GridDock3, GridDock.DockAlign.Right);
 
 
 /*
