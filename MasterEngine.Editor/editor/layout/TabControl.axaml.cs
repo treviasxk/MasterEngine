@@ -24,7 +24,7 @@ public partial class TabControl : UserControl{
     /// The event is called when an new Tab are selected.
     /// </summary>
     public Action<Tab>? OnTabChanged { get; set; }
-    public GridDock? GridDock { get; set; }
+    internal GridDock? GridDock { get; set; }
     public Tab[] Tabs {get {return (Tab[])PanelTabs.Children.ToArray(); }}
     static int Instance = 0;
 
@@ -107,11 +107,10 @@ public partial class TabControl : UserControl{
                     if(tabData.merge != GridDock.GridAlign.Top){
                         if(tabData.tabControl != null && tabData.tabControl.GridDock != null){
                             if(tabData.tabControl.PanelTabs.Children.Count > 1){
-                                Console.WriteLine("Merge Tab {0} in {1} {2}", tabData.tabControl!.ID, tabData.merge, tabData.tabControl.GridDock.ID);
+                                Console.WriteLine("Merge Tab in TabControl {0} | {2} {1}", tabData.tabControl!.ID, tabData.merge, tabData.tabControl.GridDock.ID);
+                                var gridDock = tabData.tabControl.GridDock;
                                 Remove(tab);
                                 var index = tabData.tabControl.GridDock.GetIndex(tabData.tabControl);
-
-                                var gridDock = tabData.tabControl.GridDock;
                                 tabData.tabControl.GridDock.Remove(tabData.tabControl);
 
                                 var tabControl = new TabControl();
@@ -128,8 +127,17 @@ public partial class TabControl : UserControl{
                         Console.WriteLine("Changed Tab from TabControl from: {0}, to: {1}", tabData.tabControl!.ID, ID);
                         // Remove from current TabControl run dragdrop
                         Remove(tab);
+
                         // Add tab in TabControl destination.
                         tabData.tabControl!.Add(tab);
+
+                        var gridDock = tabData.tabControl.GridDock;
+                        if(gridDock.Controls.Count == 1){
+                            gridDock.Clear();
+                            gridDock.GridDockParent.Remove(gridDock);
+                            gridDock.GridDockParent.Add(tabData.tabControl);
+                        }
+
                         // Set position drop
                         tabData.tabControl!.MoveTab(tab, tabData.point);
                     }

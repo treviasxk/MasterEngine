@@ -13,10 +13,12 @@ public partial class GridDock : UserControl{
     public Controls Controls = [];
     public GridAlign Align { get; set; } = GridAlign.Right;
     public Action<GridDock>? OnClose;
+    internal GridDock? GridDockParent;
 
     public GridDock(){
         InitializeComponent();
         ID = instance++;
+        Console.WriteLine("Created GridDock {0}", ID);
     }
 
     public void Update(){
@@ -77,9 +79,14 @@ public partial class GridDock : UserControl{
         if(index > -1 && Controls.Count > 0)
             Controls.Move(Controls.Count - 1, index);
 
-        if(control is TabControl){
-            ((TabControl)control).GridDock = this;
-            ((TabControl)control).OnClose += Remove;
+        if(control is TabControl tabControl){
+            tabControl.GridDock = this;
+            tabControl.OnClose += Remove;
+        }
+
+        if(control is GridDock gridDock){
+            gridDock.GridDockParent = this;
+            gridDock.OnClose += Remove;
         }
 
         Update();
@@ -100,15 +107,20 @@ public partial class GridDock : UserControl{
     }
 
     void OnlyRemove(Control control){
-        if(control is TabControl){
-            ((TabControl)control).GridDock = null;
-            ((TabControl)control).OnClose -= Remove;
+        if(control is TabControl tabControl){
+            tabControl.GridDock = null;
+            tabControl.OnClose -= Remove;
+            Controls.Remove(control);
         }
         
-        if(control is GridDock gridDock)
+        if(control is GridDock gridDock){
             gridDock.OnClose -= Remove;
+            if(gridDock.Controls.Count <= 1){
+                Controls.Remove(control);
+            }
+        }
 
-        Controls.Remove(control);
+    
         if(Controls.Count == 0){
             OnClose?.Invoke(this);
             Console.WriteLine("Closing GridDock {0}", ID);
