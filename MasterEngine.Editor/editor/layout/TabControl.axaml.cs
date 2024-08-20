@@ -70,7 +70,7 @@ public partial class TabControl : UserControl{
         }
     }
 
-    enum AlignMerge {}
+    enum AlignMerge {Bottom, Right, Top, Left}
     // Data transferer in dragdrop
     class TabData{
         public required int id;
@@ -78,7 +78,7 @@ public partial class TabControl : UserControl{
         public required Tab tab;
         public required Point point;
         public bool move;
-        public GridDock.GridAlign merge;
+        public AlignMerge align;
     }
 
     private async void OnPointerMovedAsync(object? sender, PointerEventArgs e){
@@ -103,26 +103,7 @@ public partial class TabControl : UserControl{
                 }
             }
             if(result == DragDropEffects.Move){               
-                if(dataObject.Get("Tab") is TabData tabData)
-                    if(tabData.merge != GridDock.GridAlign.Top){
-                        if(tabData.tabControl != null && tabData.tabControl.GridDock != null){
-                            if(tabData.tabControl.PanelTabs.Children.Count > 1){
-                                Console.WriteLine("Merge Tab in TabControl {0} | {2} {1}", tabData.tabControl!.ID, tabData.merge, tabData.tabControl.GridDock.ID);
-                                var gridDock = tabData.tabControl.GridDock;
-                                Remove(tab);
-                                var index = tabData.tabControl.GridDock.GetIndex(tabData.tabControl);
-                                tabData.tabControl.GridDock.Remove(tabData.tabControl);
-
-                                var tabControl = new TabControl();
-                                tabControl.Add(tab);
-                                var grid = new GridDock(){Align = tabData.merge};
-                                
-                                grid.Add(tabData.tabControl);
-                                grid.Add(tabControl); 
-                                gridDock.Add(grid, index);
-                            }
-                        }
-                    }else
+                if(dataObject.Get("Tab") is TabData tabData && tabData.tabControl != null && tabData.tabControl.GridDock != null)
                     if(tabData.move){
                         Console.WriteLine("Changed Tab from TabControl from: {0}, to: {1}", tabData.tabControl!.ID, ID);
                         // Remove from current TabControl run dragdrop
@@ -132,14 +113,35 @@ public partial class TabControl : UserControl{
                         tabData.tabControl!.Add(tab);
 
                         var gridDock = tabData.tabControl.GridDock;
-                        if(gridDock.Controls.Count == 1){
+                        if(gridDock.Controls.Count == 1 && gridDock.GridDockParent != null){
+                            var index = gridDock.GridDockParent.GetIndex(gridDock);
                             gridDock.Clear();
-                            gridDock.GridDockParent.Remove(gridDock);
-                            gridDock.GridDockParent.Add(tabData.tabControl);
+                            gridDock.GridDockParent?.Remove(gridDock);
+                            gridDock.GridDockParent?.Add(tabData.tabControl, index);
                         }
 
                         // Set position drop
                         tabData.tabControl!.MoveTab(tab, tabData.point);
+                    }else
+                    if(tabData.tabControl.PanelTabs.Children.Count > 1){
+                        var gridDock = tabData.tabControl.GridDock;
+                        Remove(tab);
+                        var index = tabData.tabControl.GridDock.GetIndex(tabData.tabControl);
+                        var align = tabData.align == AlignMerge.Right || tabData.align == AlignMerge.Left ? GridDock.GridAlign.Horizontal : GridDock.GridAlign.Vertical;
+                        if(gridDock.Align == align){
+                            var tabControl = new TabControl();
+                            tabControl.Add(tab);
+                            gridDock.Add(tabControl, tabData.align == AlignMerge.Right ? index + 1 : index);
+                        }else{
+                            tabData.tabControl.GridDock.Remove(tabData.tabControl);
+                            var tabControl = new TabControl();
+                            tabControl.Add(tab);
+                            var grid = new GridDock(){Align = align};
+                            
+
+                            grid.AddRange(tabData.align == AlignMerge.Bottom || tabData.align == AlignMerge.Right ? new Controls(){tabData.tabControl, tabControl} : new Controls(){tabControl, tabData.tabControl});
+                            gridDock.Add(grid, index);
+                        }
                     }
             }
             tab.RenderTransform = startPos;
@@ -156,16 +158,16 @@ public partial class TabControl : UserControl{
             var areaH = Bounds.Height / 100 * 15;
 
             if(mousePos.X < areaW)
-                tabData.merge = GridDock.GridAlign.Left;
+                tabData.align = AlignMerge.Left;
             else
             if(mousePos.Y < areaH)
-                tabData.merge = GridDock.GridAlign.Top;
+                tabData.align = AlignMerge.Top;
             else
             if(mousePos.X > Bounds.Width - areaW)
-                tabData.merge = GridDock.GridAlign.Right;
+                tabData.align = AlignMerge.Right;
             else
             if(mousePos.Y > Bounds.Height - areaH)
-                tabData.merge = GridDock.GridAlign.Bottom;
+                tabData.align = AlignMerge.Bottom;
             else{
                 tabData.tabControl = this;
             }

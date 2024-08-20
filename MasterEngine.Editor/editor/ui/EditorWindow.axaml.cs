@@ -1,13 +1,15 @@
 using System;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using MasterEngine.Editor;
 using MasterEngine.Editor.Layout;
 using MasterEngine.Graphic;
-using MasterEngine.Runtime;
+using Application = MasterEngine.Runtime.Application;
 using TabControl = MasterEngine.Editor.Layout.TabControl;
 
 namespace MasterEngine;
+
 public partial class EditorWindow : Window{
     public static EditorWindow? Window {get;set;}
     ManagerGraphic? managerGraphic;
@@ -18,6 +20,7 @@ public partial class EditorWindow : Window{
         LabelStatusBarVersion.Text = Application.EngineVersion;
         Loaded += OnLoaded;
         Closing += OnClosing;
+        this.AttachDevTools();
     }
 
 

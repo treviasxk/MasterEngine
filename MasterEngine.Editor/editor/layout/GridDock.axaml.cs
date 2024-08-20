@@ -6,19 +6,19 @@ using Avalonia.Media;
 
 namespace MasterEngine.Editor.Layout;
 public partial class GridDock : UserControl{
-    public enum GridAlign {Top, Bottom, Left, Right};
+    public enum GridAlign {Horizontal, Vertical};
 
     public int ID {get;}
     static int instance;
     public Controls Controls = [];
-    public GridAlign Align { get; set; } = GridAlign.Right;
+    public GridAlign Align { get; set; } = GridAlign.Horizontal;
     public Action<GridDock>? OnClose;
     internal GridDock? GridDockParent;
 
     public GridDock(){
         InitializeComponent();
         ID = instance++;
-        Console.WriteLine("Created GridDock {0}", ID);
+        Update();
     }
 
     public void Update(){
@@ -30,7 +30,7 @@ public partial class GridDock : UserControl{
         foreach(var item in Controls){
             if(index != 0){
                 // Add style to Grid Split
-                if(Align == GridAlign.Right || Align == GridAlign.Left)
+                if(Align == GridAlign.Horizontal)
                     Dock.ColumnDefinitions.Add(new ColumnDefinition{Width = GridLength.Auto});
                 else
                     Dock.RowDefinitions.Add(new RowDefinition{Height = GridLength.Auto});
@@ -39,36 +39,38 @@ public partial class GridDock : UserControl{
                 // Add Grid Split to Dock
                 var gridsplite = new GridSplitter{
                     Background = new SolidColorBrush(Colors.Black),
-                    ResizeDirection = Align == GridAlign.Right || Align == GridAlign.Left ? GridResizeDirection.Columns : GridResizeDirection.Rows
+                    ResizeDirection = Align == GridAlign.Horizontal ? GridResizeDirection.Columns : GridResizeDirection.Rows
                 };
                 
-                gridsplite.SetValue(Align == GridAlign.Right || Align == GridAlign.Left ? Grid.ColumnProperty : Grid.RowProperty, index);
+                gridsplite.SetValue(Align == GridAlign.Horizontal? Grid.ColumnProperty : Grid.RowProperty, index);
                 Dock.Children.Add(gridsplite);
                 index++;
             }
             
             // Add style to Control
-            if(Align == GridAlign.Right || Align == GridAlign.Left)
+            if(Align == GridAlign.Horizontal)
                 Dock.ColumnDefinitions.Add(new ColumnDefinition(){Width = GridLength.Star, MinWidth = 100});
             else
                 Dock.RowDefinitions.Add(new RowDefinition(){Height = GridLength.Star, MinHeight = 100});
             
-            item.SetValue(Align == GridAlign.Right || Align == GridAlign.Left ? Grid.ColumnProperty : Grid.RowProperty, index);
+            item.SetValue(Align == GridAlign.Horizontal ? Grid.ColumnProperty : Grid.RowProperty, index);
             Dock.Children.Add(item);
             index++;
         }
     }
 
-    public void AddRange(Controls controls, GridAlign align){
+    public void AddRange(Controls controls){
         Controls.AddRange(controls);
         foreach(var control in controls){
-            if(control is TabControl){
-                ((TabControl)control).GridDock = this;
-                ((TabControl)control).OnClose += Remove;
+            if(control is TabControl tabControl){
+                tabControl.GridDock = this;
+                tabControl.OnClose += Remove;
             }
 
-            if(control is GridDock gridDock)
+            if(control is GridDock gridDock){
+                gridDock.GridDockParent = this;
                 gridDock.OnClose += Remove;
+            }
         }
         Update();
     }
