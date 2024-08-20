@@ -125,7 +125,6 @@ public partial class GridDock : UserControl{
     
         if(Controls.Count == 0){
             OnClose?.Invoke(this);
-            Console.WriteLine("Closing GridDock {0}", ID);
         }
     }
 }

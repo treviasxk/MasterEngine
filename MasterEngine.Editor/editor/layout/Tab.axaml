@@ -22,6 +22,7 @@
             x:Name="TabTitle"
             FontSize="11"
             Padding="21 2"
+            Text="New Tab"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
             Foreground="White"

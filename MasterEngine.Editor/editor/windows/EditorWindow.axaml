@@ -50,7 +50,19 @@
                                         <MenuItem Header="About"/>
                                 </MenuItem>
                         </Menu>
+                        <Button
+                                Height="20"
+                                x:Name="Play"
+                                HorizontalAlignment="Center">
+                                <PathIcon
+                                        x:Name="TabIcon"
+                                        ZIndex="2"
+                                        Width="15"
+                                        Height="8"
+                                        VerticalAlignment="Center"/>
+                        </Button>
                 </Panel>
+                <!--Bar bottom-->
                 <Panel DockPanel.Dock="Bottom" Height="20">
                         <Menu HorizontalAlignment="Left" FontSize="11">
                                 <TextBlock Text="Master Engine" x:Name="LabelStatusBar"/>
@@ -66,13 +78,13 @@
                         <Panel
                                 VerticalAlignment="Stretch"
                                 HorizontalAlignment="Stretch">
-                        <PathIcon
-                                Foreground="#202025"
-                                Width="256"
-                                Height="256"
-                                Data="{StaticResource Logo}"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Center"/>
+                                <PathIcon
+                                        Foreground="#202025"
+                                        Width="256"
+                                        Height="256"
+                                        Data="{StaticResource Logo}"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"/>
                         </Panel>
                         <!--Content Editor-->
                         <ContentControl x:Name="PanelDock" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>

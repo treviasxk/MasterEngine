@@ -26,7 +26,7 @@ public partial class EditorWindow : Window{
 
     private void OnLoaded(object? sender, RoutedEventArgs e){
         Window = this;
-
+        TabIcon.Data = AppIcons.Play;
         var gridDock = new GridDock();
         PanelDock.Content = gridDock;
 
@@ -65,29 +65,9 @@ public partial class EditorWindow : Window{
         gridDock.Add(tabControl4);
 
 
-/*
-        GridDock.Add(tabControl, GridDock.DockAlign.Bottom);
-        GridDock.Add(tabControl2, GridDock.DockAlign.Bottom);
-        GridDock.Add(GridDock2, GridDock.DockAlign.Top);
-
-        GridDock2.Add(tabControl3, GridDock.DockAlign.Right);
-        GridDock2.Add(tabControl4, GridDock.DockAlign.Right);
-
-        var GridDock3 = new GridDock();
-        TabControl tabControl5 = new();
-        Tab teste = new("Teste");
-        Tab teste2 = new("Teste2");
-        tabControl5.Add(teste);
-        tabControl5.Add(teste2);
-        GridDock3.Add(tabControl5, GridDock.DockAlign.Right);
-        GridDock.Add(GridDock3, GridDock.DockAlign.Right);
-
-
-/*
         managerGraphic = new ManagerGraphic(Scene.Control, GraphicAPI.Direct3D11);
         Title = Application.EngineName + " - " + managerGraphic?.API;
-        managerGraphic!.GraphicComponent!.OnUpdate += OnUpdate;*/
-        
+        managerGraphic!.GraphicComponent!.OnUpdate += OnUpdate;
     }
 
     private void OnUpdate(double obj){

@@ -43,7 +43,6 @@ public partial class TabControl : UserControl{
     /// </summary>
     /// <param name="tab"></param>
     public void Select(Tab tab){
-        Console.WriteLine("Tab Control:{0} Tab Selected: {1}", ID, tab.Title);
         if(PanelTabs.Children.Contains(tab)){
             if(!PanelContent.Children.Contains(tab.Control)){
                 PanelContent.Children.Add(tab.Control);
@@ -99,20 +98,17 @@ public partial class TabControl : UserControl{
                 if(PanelTabs.Children.Count > 1){
                     Remove(tab);
                     new TabWindow(tab).Show();
-                    Console.WriteLine("Created TabControl in window!");
                 }
             }
             if(result == DragDropEffects.Move){               
                 if(dataObject.Get("Tab") is TabData tabData && tabData.tabControl != null && tabData.tabControl.GridDock != null)
                     if(tabData.move){
-                        Console.WriteLine("Changed Tab from TabControl from: {0}, to: {1}", tabData.tabControl!.ID, ID);
                         // Remove from current TabControl run dragdrop
                         Remove(tab);
-
+                        var gridDock = tabData.tabControl.GridDock;
                         // Add tab in TabControl destination.
                         tabData.tabControl!.Add(tab);
 
-                        var gridDock = tabData.tabControl.GridDock;
                         if(gridDock.Controls.Count == 1 && gridDock.GridDockParent != null){
                             var index = gridDock.GridDockParent.GetIndex(gridDock);
                             gridDock.Clear();
@@ -123,9 +119,10 @@ public partial class TabControl : UserControl{
                         // Set position drop
                         tabData.tabControl!.MoveTab(tab, tabData.point);
                     }else
-                    if(tabData.tabControl.PanelTabs.Children.Count > 1){
-                        var gridDock = tabData.tabControl.GridDock;
+                    if(tabData.tabControl.PanelTabs.Children.Count > 1 && tabData.align != AlignMerge.Top){
+                        // Remove from current TabControl run dragdrop
                         Remove(tab);
+                        var gridDock = tabData.tabControl.GridDock;
                         var index = tabData.tabControl.GridDock.GetIndex(tabData.tabControl);
                         var align = tabData.align == AlignMerge.Right || tabData.align == AlignMerge.Left ? GridDock.GridAlign.Horizontal : GridDock.GridAlign.Vertical;
                         if(gridDock.Align == align){
@@ -137,12 +134,12 @@ public partial class TabControl : UserControl{
                             var tabControl = new TabControl();
                             tabControl.Add(tab);
                             var grid = new GridDock(){Align = align};
-                            
 
                             grid.AddRange(tabData.align == AlignMerge.Bottom || tabData.align == AlignMerge.Right ? new Controls(){tabData.tabControl, tabControl} : new Controls(){tabControl, tabData.tabControl});
                             gridDock.Add(grid, index);
                         }
                     }
+                
             }
             tab.RenderTransform = startPos;
         }
@@ -199,7 +196,6 @@ public partial class TabControl : UserControl{
         int index = PanelTabs.Children.IndexOf(tab); // -1 = No registed in PanelTabs
         int newIndex = PanelTabs.Children.Count > 0 ? Math.Clamp((int)(point.X / tab.Bounds.Width), 0, PanelTabs.Children.Count - 1) : 0;
         if(index != newIndex){
-            Console.WriteLine("Moved Tab of index from: {0} to: {1}", index, newIndex);
             PanelTabs.Children.Move(index, newIndex);
             return true;
         }else
@@ -227,9 +223,6 @@ public partial class TabControl : UserControl{
         bool select = false;
         if(CurrentTab == tab)
             select = true;
-
-        if(!PanelContent.Children.Contains(tab.Control))
-            Console.WriteLine("Warning, not item existent to remove!");
 
         tab.OnClose -= Remove;
         tab.OnClick -= Select;
