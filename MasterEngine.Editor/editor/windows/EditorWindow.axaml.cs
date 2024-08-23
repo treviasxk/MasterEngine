@@ -20,7 +20,6 @@ public partial class EditorWindow : Window{
         LabelStatusBarVersion.Text = Application.EngineVersion;
         Loaded += OnLoaded;
         Closing += OnClosing;
-        this.AttachDevTools();
     }
 
 
@@ -33,15 +32,19 @@ public partial class EditorWindow : Window{
 
         var tabControl = new TabControl();
         Tab Scene = new("Scene");
+        tabControl.Add(Scene);
+        gridDock.Add(tabControl);
+
+        
         Tab Game = new("Game");
         Tab hierarchy = new("Hierarchy");
         TextBlock textBlock = new(){Text = "Hello World!"};
         Game.Control.Content = textBlock;
-        tabControl.Add(Scene);
+
         tabControl.Add(Game);
         tabControl.Add(hierarchy);
 
-        gridDock.Add(tabControl);
+
         var tabControl2 = new TabControl();
         Tab Explorer = new("Explorer");
         Tab Inspector = new("Inspector");

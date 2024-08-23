@@ -13,7 +13,7 @@ public class GraphicComponent : IDisposable {
     internal bool IsClosing {get;set;}
     #pragma warning restore CS8618
 
-    public void Init(){
+    public void SetParent(){
         switch(Application.Platform){
             case Platform.Windows:  // set DXHandle
                 Handle = Window.Native!.DXHandle!.Value;

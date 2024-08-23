@@ -71,7 +71,7 @@ public class OpenGL : GraphicComponent {
 
     private unsafe void Load(){
        if(!IsClosing){
-            Init();
+            SetParent();
             InitializeGraphic();
 
             OnLoad?.Invoke();

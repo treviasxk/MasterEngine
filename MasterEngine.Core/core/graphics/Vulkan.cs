@@ -10,6 +10,8 @@ namespace MasterEngine.Core.Graphic;
 public class Vulkan : GraphicComponent {
     public Vk? VK {get;set;}
     private Instance instance;
+    PhysicalDevice PhysicalDevice;
+    Device Device;
     public Vulkan(){
         var options = WindowOptions.DefaultVulkan;
         options.FramesPerSecond = Application.FrameRate;
@@ -29,7 +31,7 @@ public class Vulkan : GraphicComponent {
 
     private void Load(){
        if(!IsClosing){
-            Init();
+            SetParent();
             InitializeGraphic();
             OnLoad?.Invoke();
             Console.WriteLine("Graphic API Vulkan initialized!");
@@ -56,18 +58,28 @@ public class Vulkan : GraphicComponent {
             PApplicationInfo = &appInfo
         };
 
+        createInfo.EnabledLayerCount = 0;
+
+
+
         var glfwExtensions = Window.VkSurface!.GetRequiredExtensions(out var glfwExtensionCount);
 
         createInfo.EnabledExtensionCount = glfwExtensionCount;
         createInfo.PpEnabledExtensionNames = glfwExtensions;
         createInfo.EnabledLayerCount = 0;
 
+
         if(VK?.CreateInstance(ref createInfo, null, out instance) != Result.Success){
             throw new Exception("failed to create instance!");
         }
 
+
+
         Marshal.FreeHGlobal((IntPtr)appInfo.PApplicationName);
         Marshal.FreeHGlobal((IntPtr)appInfo.PEngineName);
+
+        //DeviceCreateInfo deviceCreateInfo = new();
+        //VK.CreateDevice(PhysicalDevice, in deviceCreateInfo, null, out Device device);
     }
 
     private void Update(double deltaTime){

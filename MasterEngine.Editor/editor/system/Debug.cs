@@ -1,5 +1,3 @@
-
-
 using System;
 
 namespace MasterEngine.Editor;

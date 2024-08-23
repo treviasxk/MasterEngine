@@ -1,8 +1,6 @@
 using System;
 
 namespace MasterEngine.Editor.Layout;
-
-
 [AttributeUsage(AttributeTargets.Method)]
 public class MenuItem : Attribute{
     public string Title {get;}

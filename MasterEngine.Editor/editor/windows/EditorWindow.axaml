@@ -6,7 +6,7 @@
         x:Class="MasterEngine.EditorWindow"
         Title="Master Engine">
         <DockPanel>
-                <Panel DockPanel.Dock="Top" Height="23">
+                <Panel DockPanel.Dock="Top" Height="23" ZIndex="2" Background="Black">
                         <Menu Padding="5 0" HorizontalAlignment="Left" FontSize="11">
                                 <MenuItem Header="Project">
                                         <MenuItem Header="New..."/>
@@ -79,6 +79,7 @@
                                 VerticalAlignment="Stretch"
                                 HorizontalAlignment="Stretch">
                                 <PathIcon
+                                        ZIndex="0"
                                         Foreground="#202025"
                                         Width="256"
                                         Height="256"

@@ -18,10 +18,10 @@ public partial class GridDock : UserControl{
     public GridDock(){
         InitializeComponent();
         ID = instance++;
-        Update();
+        AddRange(Controls);
     }
 
-    public void Update(){
+    public void Refresh(){
         Dock.Children.Clear();
         Dock.ColumnDefinitions.Clear();
         Dock.RowDefinitions.Clear();
@@ -72,7 +72,7 @@ public partial class GridDock : UserControl{
                 gridDock.OnClose += Remove;
             }
         }
-        Update();
+        Refresh();
     }
 
 
@@ -91,13 +91,13 @@ public partial class GridDock : UserControl{
             gridDock.OnClose += Remove;
         }
 
-        Update();
+        Refresh();
     }
 
     public void Clear(){
         foreach(var control in Controls.ToList())
             OnlyRemove(control);
-        Update();
+        Refresh();
     }
 
     public int GetIndex(Control control) => Controls.IndexOf(control);
@@ -105,7 +105,7 @@ public partial class GridDock : UserControl{
 
     public void Remove(Control control){
         OnlyRemove(control);
-        Update();
+        Refresh();
     }
 
     void OnlyRemove(Control control){
@@ -122,7 +122,6 @@ public partial class GridDock : UserControl{
             }
         }
 
-    
         if(Controls.Count == 0){
             OnClose?.Invoke(this);
         }

@@ -73,7 +73,7 @@ public class Direct3D11 : GraphicComponent {
 
     private void Load(){
        if(!IsClosing){
-            Init();
+            SetParent();
             InitializeGraphic();
             OnLoad?.Invoke();
             Console.WriteLine("Graphic API DirectX11 initialized!");
@@ -89,10 +89,8 @@ public class Direct3D11 : GraphicComponent {
 
 
         // Create our D3D11 logical device.
-        SilkMarshal.ThrowHResult
-        (
-            D3D11.CreateDevice
-            (
+        SilkMarshal.ThrowHResult(
+            D3D11.CreateDevice(
                 adapter,
                 D3DDriverType.Hardware,
                 Software: default,
@@ -115,11 +113,15 @@ public class Direct3D11 : GraphicComponent {
 
         // Create our swapchain.
         var swapChainDesc = new SwapChainDesc1{
+            Width = (uint)Window.FramebufferSize.X,
+            Height = (uint)Window.FramebufferSize.Y,
             BufferCount = 2, // double buffered
             Format = Format.FormatB8G8R8A8Unorm,
             BufferUsage = DXGI.UsageRenderTargetOutput,
             SwapEffect = SwapEffect.FlipDiscard,
-            SampleDesc = new SampleDesc(1, 0)
+            Scaling = Scaling.Stretch,
+            SampleDesc = new SampleDesc(1, 0),
+            AlphaMode = AlphaMode.Ignore
         };
 
         // Create our DXGI factory to allow us to create a swapchain. 
@@ -143,6 +145,16 @@ public class Direct3D11 : GraphicComponent {
             Usage = Usage.Default,
             BindFlags = (uint) BindFlag.VertexBuffer
         };
+        
+
+        fixed (float* vertexData = vertices){
+            var subresourceData = new SubresourceData{
+                PSysMem = vertexData
+            };
+
+            SilkMarshal.ThrowHResult(device.CreateBuffer(in bufferDesc, in subresourceData, ref vertexBuffer));
+        }
+    
 
         fixed (uint* indexData = indices){
             var subresourceData = new SubresourceData
@@ -219,23 +231,19 @@ public class Direct3D11 : GraphicComponent {
         );
 
         // Describe the layout of the input data for the shader.
-        fixed (byte* name = SilkMarshal.StringToMemory("POS"))
-        {
-            var inputElement = new InputElementDesc
-            {
+        fixed(byte* name = SilkMarshal.StringToMemory("POS")){
+            var inputElement = new InputElementDesc{
                 SemanticName = name,
                 SemanticIndex = 0,
-                Format = Format.FormatB8G8R8A8Unorm,
+                Format = Format.FormatR32G32B32Float,
                 InputSlot = 0,
                 AlignedByteOffset = 0,
                 InputSlotClass = InputClassification.PerVertexData,
                 InstanceDataStepRate = 0
             };
 
-            SilkMarshal.ThrowHResult
-            (
-                device.CreateInputLayout
-                (
+            SilkMarshal.ThrowHResult(
+                device.CreateInputLayout(
                     in inputElement,
                     1,
                     vertexCode.GetBufferPointer(),
@@ -265,7 +273,7 @@ public class Direct3D11 : GraphicComponent {
         var vertexStride = 3U * sizeof(float);
         var vertexOffset = 0U;
         Color color = Color.CornflowerBlue;
-        float[]? backgroundColour = new[]{color.R / 255f, color.G, color.B / 255f, color.A / 255f};
+        float[] backgroundColour = [color.R / 255f, color.G, color.B / 255f, color.A / 255f];
 
         // Obtain the framebuffer for the swapchain's backbuffer.
         using var framebuffer = swapchain.GetBuffer<ID3D11Texture2D>(0);
@@ -274,16 +282,16 @@ public class Direct3D11 : GraphicComponent {
         ComPtr<ID3D11RenderTargetView> renderTargetView = default;
         SilkMarshal.ThrowHResult(device.CreateRenderTargetView(framebuffer, null, ref renderTargetView));
         
+        // Tell the output merger about our render target view.
+        deviceContext.OMSetRenderTargets(1, ref renderTargetView, ref Unsafe.NullRef<ID3D11DepthStencilView>());
+
         // Clear the render target to be all black ahead of rendering.
         deviceContext.ClearRenderTargetView(renderTargetView, ref backgroundColour[0]);
         
         // Update the rasterizer state with the current viewport.
         var viewport = new Viewport(0, 0, Window.FramebufferSize.X, Window.FramebufferSize.Y, 0, 1);
         deviceContext.RSSetViewports(1, in viewport);
-        
-        // Tell the output merger about our render target view.
-        deviceContext.OMSetRenderTargets(1, ref renderTargetView, ref Unsafe.NullRef<ID3D11DepthStencilView>());
-        
+                
         // Update the input assembler to use our shader input layout, and associated vertex & index buffers.
         deviceContext.IASetPrimitiveTopology(D3DPrimitiveTopology.D3DPrimitiveTopologyTrianglelist);
         deviceContext.IASetInputLayout(inputLayout);
@@ -293,7 +301,7 @@ public class Direct3D11 : GraphicComponent {
         // Bind our shaders.
         deviceContext.VSSetShader(vertexShader, ref Unsafe.NullRef<ComPtr<ID3D11ClassInstance>>(), 0);
         deviceContext.PSSetShader(pixelShader, ref Unsafe.NullRef<ComPtr<ID3D11ClassInstance>>(), 0);
-        
+
         // Draw the quad.
         deviceContext.DrawIndexed(6, 0, 0);
         
