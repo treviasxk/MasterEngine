@@ -68,9 +68,9 @@ public partial class EditorWindow : Window{
         gridDock.Add(tabControl4);
 
 
-        managerGraphic = new ManagerGraphic(Scene.Control, GraphicAPI.Direct3D11);
+        //managerGraphic = new ManagerGraphic(Scene.Control, GraphicAPI.OpenGL);
         Title = Application.EngineName + " - " + managerGraphic?.API;
-        managerGraphic!.GraphicComponent!.OnUpdate += OnUpdate;
+        //managerGraphic!.GraphicComponent!.OnUpdate += OnUpdate;
     }
 
     private void OnUpdate(double obj){
