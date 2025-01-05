@@ -1,5 +1,5 @@
 # MasterEngine
-MasterEngine is the initial project of a Game Engine 3D cross-platform, built with C# only (version 8.0).
+MasterEngine is the initial project of a Game Engine 3D cross-platform, built with C# only (version 9.0).
 
 ## Donate
  - Brazil
@@ -13,5 +13,5 @@ MasterEngine is the initial project of a Game Engine 3D cross-platform, built wi
     - [core/graphics/](https://github.com/treviasxk/MasterEngine/blob/main/MasterEngine.Core/core/graphics/) - All scripts in this folder are responsible for initializing and control the graphics API.
 
 ## Frameworks
-* [Silk.net](https://github.com/dotnet/Silk.NET) - v2.21.0
-* [Avalonia](https://github.com/AvaloniaUI/Avalonia) - v11.1.3
+* [Silk.net](https://github.com/dotnet/Silk.NET) - v2.22.0
+* [Avalonia](https://github.com/AvaloniaUI/Avalonia) - v11.2.1
