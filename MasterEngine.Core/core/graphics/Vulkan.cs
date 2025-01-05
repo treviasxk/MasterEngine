@@ -78,8 +78,8 @@ public class Vulkan : GraphicComponent {
         Marshal.FreeHGlobal((IntPtr)appInfo.PApplicationName);
         Marshal.FreeHGlobal((IntPtr)appInfo.PEngineName);
 
-        //DeviceCreateInfo deviceCreateInfo = new();
-        //VK.CreateDevice(PhysicalDevice, in deviceCreateInfo, null, out Device device);
+        DeviceCreateInfo deviceCreateInfo = new();
+        VK.CreateDevice(PhysicalDevice, in deviceCreateInfo, null, out Device device);
     }
 
     private void Update(double deltaTime){

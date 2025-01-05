@@ -4,9 +4,15 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [{
-        "name": "C#: Master Engine Editor",
+        "name": "C#: MasterEngine Editor",
         "type": "dotnet",
         "request": "launch",
         "projectPath": "${workspaceFolder}/MasterEngine.Editor/MasterEngine.Editor.csproj"
+    },
+    {
+        "name": "C#: MasterEngine Runtime",
+        "type": "dotnet",
+        "request": "launch",
+        "projectPath": "${workspaceFolder}/MasterEngine.Runtime/MasterEngine.Runtime.csproj"
     }]
 }

@@ -38,6 +38,13 @@ namespace MasterEngine.Graphic{
                 case GraphicAPI.Direct3D12:
                     GraphicComponent = new Direct3D12();
                 break;
+                default:
+                    switch(Application.Platform){
+                        default:
+                            GraphicComponent = new OpenGL();
+                        break;
+                    }
+                break;
             }
 
             GraphicComponent!.OnLoad += OnLoad;
